@@ -7,6 +7,10 @@ export default class LoginScreen extends Component {
         this.props.navigation.navigate('Overview')
     }
   
+    static navigationOptions = {
+        header: null
+    }
+
     render() {
     return (
         <Container>

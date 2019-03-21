@@ -10,8 +10,6 @@ export default class ClockIt extends Component {
   }
 }
 
-
-
 /*
 
 const LoginScreenRouter = createStackNavigator({
