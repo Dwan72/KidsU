@@ -1,7 +1,7 @@
 import React from 'react';
-import Fragment from 'react'; 
-import Component from 'react'; 
-import { TouchableHighlight, AppRegistry, TouchableOpacity, StyleSheet, Alert, Button, View, Text } from 'react-native';
+import Fragment from 'react';
+import Component from 'react';
+import { TouchableHighlight, AppRegistry, TouchableOpacity, StyleSheet, Alert, View, Text } from 'react-native';
 
 
 export default class TimeClockScreen extends React.Component {
@@ -9,11 +9,10 @@ export default class TimeClockScreen extends React.Component {
   static navigationOptions = {
     title: 'Time Clock',
   };
-  
+
   state = {
     toggle:true
   }
-
 
 toggle = () => {
 	this.setState({
@@ -35,40 +34,34 @@ _onPress() {
     const changeBGColor = toggle?"#41f46e":"#f46542";
 
     return (
-    
-    <React.Fragment>
-
-    <Text style = {styles.dayTotal}> DAY TOTAL </Text>
-    <Text style = {styles.status}> STATUS </Text> 
-
-    <Text style = {styles.dayTotalVal}> 11h 50m </Text>
-    <Text style = {styles.statusVal}> Off the clock </Text> 
-
-    <Text style = {styles.navigateNotes} onPress={ ()=> navigate('TimeClockNotes') }> Nativate to notes</Text>
-
+      <React.Fragment>
+        <Text style = {styles.dayTotal}> DAY TOTAL </Text>
+        <Text style = {styles.status}> STATUS </Text>
+        <Text style = {styles.dayTotalVal}> 11h 50m </Text>
+        <Text style = {styles.statusVal}> Off the clock </Text>
+        <Text style = {styles.navigateNotes} onPress={ ()=> navigate('TimeClockNotes') }> Nativate to notes</Text>
 
       <TouchableOpacity onPress={()=>this._onPress()}
         activeOpacity={0.5} style={[styles.buttonClockInOut, {backgroundColor:changeBGColor}]}
       >
-         <Text style={styles.text}> {ChangeText} 
+         <Text style={styles.text}> {ChangeText}
          </Text>
        </TouchableOpacity>
 
-
-</React.Fragment>
-);
+    </React.Fragment>
+  );
   }
 }
 
 const styles = StyleSheet.create({
-  
+
   // Clock In and Clock Out buttons
   buttonClockInOut: {
   	textAlignVertical: 'center',
     position: 'absolute',
     bottom: '10%',
     right: '25%',
-    left: '25%', 
+    left: '25%',
     textAlign: 'center',
     backgroundColor: '#41f46e',
     padding: 25,
@@ -83,7 +76,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: '10%',
     right: '5%',
-    left: '51%', 
+    left: '51%',
     textAlign: 'center',
     backgroundColor: '#f46542',
     padding: 25,
@@ -97,7 +90,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: '40%',
     right: '25%',
-    left: '25%', 
+    left: '25%',
     textAlign: 'center'
   },
     // Day total
@@ -106,7 +99,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     position: 'absolute',
     top: '5%',
-    left: '10%', 
+    left: '10%',
     textAlign: 'center'
   },
         // Day total (Value)
@@ -114,7 +107,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     position: 'absolute',
     top: '10%',
-    left: '10%', 
+    left: '10%',
     textAlign: 'center'
   },
     // Status
@@ -123,7 +116,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     position: 'absolute',
     top: '5%',
-    right: '10%', 
+    right: '10%',
     textAlign: 'center'
   },
      // Status (Value)
@@ -131,12 +124,12 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     position: 'absolute',
     top: '10%',
-    right: '10%', 
+    right: '10%',
     textAlign: 'center'
   },
   // Align the text to the center
   text: {
-  	textAlign: 'center', 
+  	textAlign: 'center',
   	alignItems: 'center'
   },
 })
