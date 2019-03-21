@@ -3,19 +3,11 @@ import { Container, Header, Content, Form, Item, Input, Label, Button, Text } fr
 
 
 
-const emailRegex = RegExp(
-
-  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-
-);
-
-
-
 export default class LoginScreen extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        email: '',
+        username: '',
         password: '',
 
       };
@@ -24,36 +16,25 @@ export default class LoginScreen extends Component {
 }
 
 
-    loginPressed = () => {
+   loginPressed = () => {
 
-        const { email, password } = this.state;
-        console.log('Email:', email,'Password:', password);
+     let v = this.state.password;
+     let len = v.length;
+     if( this.state.username != null && this.state.password != null ){
+      const { username, password } = this.state;
+      console.log('Username:', username,'Password:', password);
        this.props.navigation.navigate('Overview')
-    }
+
+     }
+     else{
+
+         console.log("Error");
+     }
+
+    };
 
 
 
-   handleChange = e => {
-
-     e.preventDefault();
-
-     const { name, value } = e.target;
-
-      switch (name) {
-
-        case "email":
-         emailRegex.test(value) ? "" : "invalid email address";
-          break;
-
-        case "password":
-          formErrors.password =
-          value.length < 8 ? "minimum 8 characaters required" : "";
-           break;
-
-       default:
-           break;
-         }
-};
 
 
     render() {
@@ -65,7 +46,7 @@ export default class LoginScreen extends Component {
                 <Form>
                     <Item inlineLabel>
                         <Label>Username</Label>
-                    <Input handleChange={email => this.setState({ email })} />
+                    <Input onChangeText={username => this.setState({ username })}/>
                     </Item>
                     <Item inlineLabel last>
                         <Label>Password</Label>
