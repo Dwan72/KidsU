@@ -8,6 +8,4 @@ const LoginScreenRouter = createStackNavigator({
     Overview: { screen: OverviewScreenRouter}
 })
   
-const AppContainer = createAppContainer(LoginScreenRouter);
-export default AppContainer;
-  
+export default createAppContainer(LoginScreenRouter);

@@ -3,16 +3,38 @@ import OverviewScreen from './OverviewScreen';
 import TimeclockScreenRouter from '../TimeclockScreen/index';
 import TimesheetScreenRouter from '../TimesheetScreen/index';
 import MoreScreenRouter from '../MoreScreen/index';
-import { Button, Text, Icon, Footer, FooterTab } from 'native-base';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
+import TabBarIcon from '../components/TabBarIcon';
 
 
 const OverviewScreenRouter = createStackNavigator({
     Overview: { screen: OverviewScreen }
 })
+OverviewScreenRouter.navigationOptions = {
+    tabBarLabel: 'Overview',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+        focused={focused}
+        name={
+          Platform.OS === 'ios'
+            ? `ios-information-circle${focused ? '' : '-outline'}`
+            : 'md-information-circle'
+        }
+      />
+    ),
+};
 
-//this is the bottom tab navigator
+const Tabs = createBottomTabNavigator({
+    OverviewScreenRouter,
+    TimeclockScreenRouter,
+    TimesheetScreenRouter,
+    MoreScreenRouter
+})
+
+
+/*
 const Tabs = createBottomTabNavigator(
     {
         Overview: { screen: OverviewScreenRouter },
@@ -76,9 +98,11 @@ const Tabs = createBottomTabNavigator(
             );
         }
     }
-
-
 )
+*/
+
+
+
 const styles = StyleSheet.create({
     buttons: {
         fontSize: 10

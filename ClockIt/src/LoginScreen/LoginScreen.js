@@ -6,11 +6,16 @@ export default class LoginScreen extends Component {
     loginPressed = () => {
         this.props.navigation.navigate('Overview')
     }
+    static navigationOptions = {
+        header: null
+    }
   
     render() {
     return (
         <Container>
-            <Header />
+            <Header>
+                <Text>this is a header</Text>
+            </Header>
             <Content>
 
                 <Form>
@@ -35,3 +40,4 @@ export default class LoginScreen extends Component {
     );
   }
 }
+
