@@ -9,10 +9,15 @@ import { Platform } from 'react-native';
 import TabBarIcon from '../components/TabBarIcon';
 
 
-const OverviewScreenRouter = createStackNavigator({
-    Overview: { screen: OverviewScreen }
-})
+const OverviewScreenRouter = createStackNavigator(
+    {
+        Overview: { screen: OverviewScreen },
+    }, {
+        headerMode: 'none'
+    }
+);
 OverviewScreenRouter.navigationOptions = {
+    headerMode: 'none',
     tabBarLabel: 'Overview',
     tabBarIcon: ({ focused }) => (
         <TabBarIcon

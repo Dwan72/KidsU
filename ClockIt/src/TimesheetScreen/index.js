@@ -2,9 +2,13 @@ import {createStackNavigator, createAppContainer } from 'react-navigation'
 import TimesheetScreen from './TimesheetScreen'
 
 
-const TimesheetScreenRouter = createStackNavigator({
+const TimesheetScreenRouter = createStackNavigator(
+  {
     Timesheet: { screen: TimesheetScreen }
-})
+  }, {
+    headerMode: 'none'
+  }
+)
 TimesheetScreenRouter.navigationOptions = {
     tabBarLabel: 'Time Sheets',
     tabBarIcon: ({ focused }) => (

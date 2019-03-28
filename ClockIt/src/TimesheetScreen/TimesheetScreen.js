@@ -4,8 +4,8 @@ import { Container, Header, Content, List, ListItem, Text, Separator, Right, But
 export default class ListSeparatorExample extends Component{
 
   static navigationOptions = {
-    title: 'TimeSheets'
-  };
+    header: null
+  }
   render() {
     return(      
     <Container>

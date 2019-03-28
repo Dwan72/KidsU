@@ -3,9 +3,6 @@ import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text
 
 export default class MoreScreen extends React.Component {
 
-  static navigationOptions = {
-    title: 'hello guys'
-  }
     render() {
         return (
           <Container>

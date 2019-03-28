@@ -3,9 +3,13 @@ import LoginScreen from './LoginScreen'
 import OverviewScreenRouter from '../OverviewScreen/index';
 
 
-const LoginScreenRouter = createStackNavigator({
-    Home: { screen: LoginScreen },
-    Overview: { screen: OverviewScreenRouter}
-})
+const LoginScreenRouter = createStackNavigator(
+    {
+        Home: { screen: LoginScreen },
+        Overview: { screen: OverviewScreenRouter},
+    }, {
+        headerMode: 'none'
+    }
+)
   
 export default createAppContainer(LoginScreenRouter);

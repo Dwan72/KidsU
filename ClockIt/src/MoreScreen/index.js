@@ -2,12 +2,15 @@ import {createStackNavigator, createAppContainer } from 'react-navigation'
 import MoreScreen from './MoreScreen'
 
 
-const MoreScreenRouter = createStackNavigator({
+const MoreScreenRouter = createStackNavigator(
+  {
     More: { screen: MoreScreen }
-})
+  }, {
+    headerMode: 'none'
+  }
+)
 
 MoreScreenRouter.navigationOptions = {
-    tabBarLabel: 'More',
     tabBarIcon: ({ focused }) => (
       <TabBarIcon
         focused={focused}

@@ -7,8 +7,9 @@ export default class LoginScreen extends Component {
         this.props.navigation.navigate('Overview')
     }
     static navigationOptions = {
-        header: null
-    }
+        header: null,
+        title: null,
+    };
   
     render() {
     return (
