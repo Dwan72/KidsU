@@ -15,6 +15,7 @@
     "react-timer-machine": "^1.0.2"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.8.1",
     "babel-preset-expo": "^5.0.0"
   },
   "private": true

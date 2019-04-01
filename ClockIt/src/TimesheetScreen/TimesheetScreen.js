@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Text, Separator, Right, Button, Icon } from 'native-base';
+import { Container, Header, Content, List, ListItem, Text, Separator, Right, Button, Icon, Body, Title } from 'native-base';
 
 export default class ListSeparatorExample extends Component{
 
@@ -9,7 +9,18 @@ export default class ListSeparatorExample extends Component{
   render() {
     return(      
     <Container>
-      <Header />
+
+      <Header>
+        <Body>
+          <Title>Header</Title>
+        </Body>
+        <Right>
+          <Button transparent>
+            <Icon name='plus' />
+          </Button>
+        </Right>
+      </Header>
+
       <Content>
 
         <Separator bordered>

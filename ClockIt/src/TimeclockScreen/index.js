@@ -9,15 +9,7 @@ const TimeclockScreenRouter = createStackNavigator(
     headerMode: 'none'
   }
 )
-TimeclockScreenRouter.navigationOptions = {
-    tabBarLabel: 'Clock in',
-    tabBarIcon: ({ focused }) => (
-      <TabBarIcon
-        focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-      />
-    ),
-};
+
 
 
 const AppContainer = createAppContainer(TimeclockScreenRouter);

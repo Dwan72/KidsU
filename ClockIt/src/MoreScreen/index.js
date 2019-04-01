@@ -10,14 +10,6 @@ const MoreScreenRouter = createStackNavigator(
   }
 )
 
-MoreScreenRouter.navigationOptions = {
-    tabBarIcon: ({ focused }) => (
-      <TabBarIcon
-        focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-      />
-    ),
-};
 
 const AppContainer = createAppContainer(MoreScreenRouter);
 export default AppContainer;
