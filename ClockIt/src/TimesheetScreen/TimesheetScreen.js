@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Text, Separator, Right, Button, Icon, Body, Title } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class ListSeparatorExample extends Component{
 
@@ -16,7 +17,7 @@ export default class ListSeparatorExample extends Component{
         </Body>
         <Right>
           <Button transparent>
-            <Icon name='plus' />
+            <Ionicons name="ios-add" size={30}/>
           </Button>
         </Right>
       </Header>
