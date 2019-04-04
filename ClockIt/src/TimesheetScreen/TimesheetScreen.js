@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Text, Separator, Right, Button, Icon, Body, Title } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { createStackNavigator } from 'react-navigation'
 
-export default class ListSeparatorExample extends Component{
+
+export default class ListSeparatorExample extends React.Component{
 
   static navigationOptions = {
     header: null
   }
+  
+  
+
   render() {
+
+    const { navigate } = this.props.navigation;
     return(      
     <Container>
 
@@ -16,7 +23,9 @@ export default class ListSeparatorExample extends Component{
           <Title>Header</Title>
         </Body>
         <Right>
-          <Button transparent>
+          <Button 
+            onPress = {() => this.props.navigation.navigate('AddTimesheet')}
+            transparent>
             <Ionicons name="ios-add" size={30}/>
           </Button>
         </Right>
