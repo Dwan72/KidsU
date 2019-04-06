@@ -4,7 +4,7 @@ import { Col, Row, Grid } from 'react-native-easy-grid'
 import { Ionicons } from '@expo/vector-icons';
 import { Segment, Form, Textarea } from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import {TouchableOpacity } from 'react-native'
+import { TouchableOpacity, View, StyleSheet , TextInput } from 'react-native'
 
 export default class AddTimesheet extends Component {
     static navigationOptions = {
@@ -12,16 +12,31 @@ export default class AddTimesheet extends Component {
     }
 
     state = {
-        isDateTimePickerVisible: false,
-        datetime: '',
+        showStartDatePicker: false,
+        showEndDatePicker: false,
+        startTime: '',
+        endTime: '',
     };
 
-    _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
-    _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
-    _handleDatePicked = (datetime) => {
-        this._hideDateTimePicker();
-        this.state.datetime = datetime;
-    };
+    handleStartDatePress = () => { this.setState({ showStartDatePicker: true }); }
+    handleStartDatePickerHide = () => { this.setState({ showStartDatePicker: false}); }
+
+    handleEndDatePress = () => { this.setState({ showEndDatePicker: true }); }
+    handleEndDatePickerHide = () => { this.setState({ showEndDatePicker: false}); }
+
+    handleStartDatePicked = (startTime) => {
+        this.setState({
+            startTime,
+        });
+        this.handleStartDatePickerHide();
+    }
+    handleEndDatePicked = (endTime) => {
+        this.setState({
+            endTime,
+        });
+        this.handleEndDatePickerHide();
+    }
+    
 
     render() {
 
@@ -47,37 +62,61 @@ export default class AddTimesheet extends Component {
 
                     <List>
                         <ListItem>
-                            <Left>
-                                <TouchableOpacity onPress={this._showDateTimePicker}>
+                            <View style = {styles.label}>
+                                <TouchableOpacity 
+                                    onPress={this.handleStartDatePress}
+                                    >
                                     <Text>Start Time</Text>
-                                </TouchableOpacity>
-                                <DateTimePicker
-                                    isVisible={this.state.isDateTimePickerVisible}
-                                    onConfirm={this._handleDatePicked}
-                                    onCancel={this._hideDateTimePicker}
-                                    mode={'datetime'}
+                                </TouchableOpacity>   
+                            </View>     
+
+                            <View style = {styles.time}>
+                                <TextInput
+                                    placeholder="Time"
+                                    spellCheck={false}
+                                    value={this.state.startTime.toString()}
+                                    editable={!this.state.showStartDatePicker}
+                                    onFocus={this.handleStartDatePress}
                                 />
-                            </Left>
-                            <Body/>
-                            <Right>
-                                <Text>{this.state.datetime}</Text>
-                            </Right>
+                            </View>
+
+                            <DateTimePicker
+                                isVisible={this.state.showStartDatePicker}
+                                onConfirm={this.handleStartDatePicked}
+                                onCancel={this.handleStartDatePickerHide}
+                                mode={'datetime'}
+                                is24Hour={false}
+                            />
+
                         </ListItem>
 
                         <ListItem>
-                            <Left>
-                            <TouchableOpacity onPress={this._showDateTimePicker}>
+                        <View style = {styles.label}>
+                                <TouchableOpacity 
+                                    onPress={this.handleEndDatePress}
+                                    >
                                     <Text>End Time</Text>
-                                </TouchableOpacity>
-                                <DateTimePicker
-                                    isVisible={this.state.isDateTimePickerVisible}
-                                    onConfirm={this._handleDatePicked}
-                                    onCancel={this._hideDateTimePicker}
-                                    mode={'datetime'}
+                                </TouchableOpacity>   
+                            </View>     
+
+                            <View style = {styles.time}>
+                                <TextInput
+                                    placeholder="Time"
+                                    spellCheck={false}
+                                    value={this.state.endTime.toString()}
+                                    editable={!this.state.showEndDatePicker}
+                                    onFocus={this.handleEndDatePress}
                                 />
-                            </Left>
-                            <Body/>
-                            <Right/>
+                            </View>
+
+                            <DateTimePicker
+                                isVisible={this.state.showEndDatePicker}
+                                onConfirm={this.handleEndDatePicked}
+                                onCancel={this.handleEndDatePickerHide}
+                                mode={'datetime'}
+                                is24Hour={false}
+                            />
+                            
                         </ListItem>
 
                         <ListItem>
@@ -110,3 +149,12 @@ export default class AddTimesheet extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    label:{
+        alignItems: 'flex-start'
+    },
+    time:{
+        alignItems: 'flex-end'
+    }
+})
