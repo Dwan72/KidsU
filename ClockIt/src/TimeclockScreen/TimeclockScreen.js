@@ -2,8 +2,8 @@ import React from 'react';
 import Fragment from 'react'; 
 import Component from 'react'; 
 import TimerMachine from 'react-timer-machine'
-import { TouchableHighlight, AppRegistry, TouchableOpacity, StyleSheet, Alert, View, Text } from 'react-native';
-import { Container, TextInput, Header, Content, Textarea, Form, List, ListItem, Separator, Right, Left, Footer, FooterTab, Button, Icon, Body, Title } from 'native-base';
+import { TouchableHighlight,TextInput, FlatList, AppRegistry, TouchableOpacity, StyleSheet, Alert, View, Text } from 'react-native';
+import { Container, Header, Content, Textarea, Form, List, ListItem, Separator, Right, Left, Footer, FooterTab, Button, Icon, Body, Title } from 'native-base';
 
 
 export default class TimeClockScreen extends React.Component {
@@ -11,9 +11,37 @@ export default class TimeClockScreen extends React.Component {
 
   constructor() {
     super();
-    this.state = { count: 0, toggle: true}
+    this.state = { 
+      count: 0, 
+      toggle: true,
+      arrayHolder: [{
+      title: 'FOUR'
+    },
+    {
+      title: 'FIVE'
+    }],
+      textInput_Holder: ''
+    }
     //this.state = {Notes: this.props.navigation.state.params.Notes,};
-}
+   this.array = [{
+      title: 'ONE'
+    },
+    {
+      title: 'TWO'
+    },
+    {
+      title: 'THREE'
+    },
+    {
+      title: 'FOUR'
+    },
+    {
+      title: 'FIVE'
+    }
+    ]
+ 
+    }
+
 
 
   static navigationOptions = {
@@ -25,17 +53,35 @@ export default class TimeClockScreen extends React.Component {
     }
     
 
+joinData = () => {
+  this.array.push({title : this.state.textInput_Holder});
+  this.setState({ arrayHolder : [...this.array] })
+  console.log("Cancel Pressed")
+}
+
 toggle = () => {
 	this.setState({
 		on: !this.state.on
 	})
 }
+  componentDidMount() {
+ 
+    this.setState({ arrayHolder: [...this.array] })
+ 
+  }
 
+  GetItem(item) {
+ 
+    Alert.alert(item);
+ 
+  }
 
 // Used for Clock In and Clock Out toggle.
 _onPress() {
   const newState = !this.state.toggle;
   this.setState({toggle:newState})
+    this.array.push({title : this.state.textInput_Holder});
+    this.setState({ arrayHolder: [...this.array] })
 }
 
 clockingOut = () => {
@@ -105,7 +151,8 @@ clockingOut = () => {
                     </List>
 <Text style = {styles.Notes}>Notes:</Text>
                     <Textarea style = {styles.navigateNotes} returnKeyType={"done"} 
-    blurOnSubmit = {true} rowSpan={5} bordered placeholder="Enter your notes here" />
+                    onChangeText={data => this.setState({ textInput_Holder: data })}
+                    blurOnSubmit = {true} rowSpan={8} bordered placeholder="Enter your notes here" />
 
 
       <TouchableOpacity onPress={()=>this._onPress()} disabled={changeInvisible} 
@@ -124,17 +171,29 @@ clockingOut = () => {
          <Text style={styles.text}> {ChangeText} 
          </Text>
        </TouchableOpacity>
-       
-       <List>
-                        <ListItem>
-                            <View>
-                               
-                                  <Text>test</Text>  
-                               
-                            </View>     
-                        </ListItem>
 
-                    </List>
+        <TextInput
+          placeholder="Enter Value Here"
+          onChangeText={data => this.setState({ textInput_Holder: data })}
+          style={styles.textInputStyle}
+          underlineColorAndroid='transparent'
+        />
+
+       <TouchableOpacity onPress={this.joinData} activeOpacity={0.7} style={styles.button} >
+                 <Text style={styles.buttonText}> Add Values To FlatList </Text>
+ 
+        </TouchableOpacity>
+<List>
+        <FlatList
+          data={this.state.arrayHolder}
+          extraData={this.state.arrayHolder}
+          keyExtractor={(index) => index.toString()}
+          ItemSeparatorComponent={this.FlatListItemSeparator}
+          renderItem={({ item }) => <Text style={styles.item}>
+           {item.title} </Text>}
+        />
+
+</List>
 
            
             </Content>
