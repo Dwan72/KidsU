@@ -8,10 +8,13 @@ import { StyleSheet } from 'react-native';
 import { Platform } from 'react-native';
 import TabBarIcon from '../components/TabBarIcon';
 
-
-const OverviewScreenRouter = createStackNavigator({
-    Overview: { screen: OverviewScreen }
-})
+const OverviewScreenRouter = createStackNavigator(
+    {
+        Overview: { screen: OverviewScreen },
+    }, {
+        headerMode: 'none'
+    }
+);
 OverviewScreenRouter.navigationOptions = {
     tabBarLabel: 'Overview',
     tabBarIcon: ({ focused }) => (
@@ -25,6 +28,39 @@ OverviewScreenRouter.navigationOptions = {
       />
     ),
 };
+
+TimeclockScreenRouter.navigationOptions = {
+    tabBarLabel: 'Clock in',
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon
+        focused={focused}
+        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      />
+    ),
+};
+
+
+MoreScreenRouter.navigationOptions = {
+    tabBarLabel: 'More',
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon
+        focused={focused}
+        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      />
+    ),
+};
+
+TimesheetScreenRouter.navigationOptions = {
+    tabBarLabel: 'Timesheet',
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon
+        focused={focused}
+        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      />
+    ),
+};
+
+
 
 const Tabs = createBottomTabNavigator({
     OverviewScreenRouter,

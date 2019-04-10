@@ -1,19 +1,12 @@
 import {createStackNavigator, createAppContainer } from 'react-navigation'
 import TimeclockScreen from './TimeclockScreen'
+import TimeclockNotesScreen from './TimeclockNotes'
 
 
 const TimeclockScreenRouter = createStackNavigator({
-    Timeclock: { screen: TimeclockScreen }
+    Timeclock: { screen: TimeclockScreen },
+    TimeclockNotes: { screen: TimeclockNotesScreen},
 })
-TimeclockScreenRouter.navigationOptions = {
-    tabBarLabel: 'Clock in',
-    tabBarIcon: ({ focused }) => (
-      <TabBarIcon
-        focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-      />
-    ),
-};
 
 
 const AppContainer = createAppContainer(TimeclockScreenRouter);
