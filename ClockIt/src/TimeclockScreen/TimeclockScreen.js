@@ -9,8 +9,9 @@ import { Container, Header, Content, Textarea, Form, List, ListItem, Separator, 
 export default class TimeClockScreen extends React.Component {
 
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this._pushNotes= this._pushNotes.bind(this);
     this.state = { 
       count: 0, 
       toggle: true,
@@ -24,22 +25,16 @@ export default class TimeClockScreen extends React.Component {
     }
     //this.state = {Notes: this.props.navigation.state.params.Notes,};
    this.array = [{
-      title: 'ONE'
-    },
-    {
-      title: 'TWO'
-    },
-    {
-      title: 'THREE'
-    },
-    {
-      title: 'FOUR'
-    },
-    {
-      title: 'FIVE'
+      title: 'Notes will appear here:'
     }
     ]
  
+    }
+
+    writeText = text => {
+      this.setState({
+        appText: text
+      })
     }
 
 
@@ -80,16 +75,38 @@ toggle = () => {
 _onPress() {
   const newState = !this.state.toggle;
   this.setState({toggle:newState})
-    this.array.push({title : this.state.textInput_Holder});
-    this.setState({ arrayHolder: [...this.array] })
 }
+
+_pushNotes() { 
+    var item = this.state.textInput_Holder;
+    const newState = !this.state.toggle;
+    this.setState({toggle:newState})
+    this.array.push({title : item});
+    this.setState({ arrayHolder: [...this.array] })
+
+    this.props.navigation.push({
+      screen: 'TimesheetScreen',
+      item: 'item',
+      passProps: {
+        data: item
+      },
+    });
+
+
+    this.setState({textInput_Holder:""}); // reset notes box 
+    this.setState({data:""});
+
+
+    }
+
+
 
 clockingOut = () => {
     Alert.alert(
       "You are clocking out",
       "Are you sure?",
       [
-        { text: "Yes", onPress: () => this._onPress() },
+        { text: "Yes", onPress: () => this._pushNotes() },
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
@@ -109,7 +126,6 @@ clockingOut = () => {
 
     const { navigate } = this.props.navigation;
     const {toggle} = this.state;
-    const ChangeText = toggle?"Clock In":"Clock Out";
     // Colors can be changed
     const changeBGColor = toggle?"#48d1cc":"#fa8072";
     const changeVisible = toggle?1:0;
@@ -152,37 +168,25 @@ clockingOut = () => {
 <Text style = {styles.Notes}>Notes:</Text>
                     <Textarea style = {styles.navigateNotes} returnKeyType={"done"} 
                     onChangeText={data => this.setState({ textInput_Holder: data })}
-                    blurOnSubmit = {true} rowSpan={8} bordered placeholder="Enter your notes here" />
+                    blurOnSubmit = {true} rowSpan={8} bordered placeholder="Enter your notes here" 
+                    value={this.state.textInput_Holder} />
 
 
       <TouchableOpacity onPress={()=>this._onPress()} disabled={changeInvisible} 
         activeOpacity={0.5} style={[styles.buttonClockInOut, {backgroundColor:changeBGColor, opacity:changeVisible}]}
       >
-
-         <Text style={styles.text}> {ChangeText} 
+      <Text style={styles.text}> Clock In
          </Text>
        </TouchableOpacity>
+
 
       <TouchableOpacity onPress={()=>this.clockingOut()} disabled={changeVisible} 
         activeOpacity={0.5} style={[styles.buttonClockInOut, {backgroundColor:changeBGColor, opacity:changeInvisible}]}
-      
       >
-
-         <Text style={styles.text}> {ChangeText} 
+      <Text style={styles.text}> Clock Out
          </Text>
        </TouchableOpacity>
 
-        <TextInput
-          placeholder="Enter Value Here"
-          onChangeText={data => this.setState({ textInput_Holder: data })}
-          style={styles.textInputStyle}
-          underlineColorAndroid='transparent'
-        />
-
-       <TouchableOpacity onPress={this.joinData} activeOpacity={0.7} style={styles.button} >
-                 <Text style={styles.buttonText}> Add Values To FlatList </Text>
- 
-        </TouchableOpacity>
 <List>
         <FlatList
           data={this.state.arrayHolder}
