@@ -1,9 +1,10 @@
 {
-  "packagerPort": 19001,
-  "packagerPid": 9464,
-  "expoServerNgrokUrl": "https://9m-men.michaeltong.clockit.exp.direct",
-  "packagerNgrokUrl": "https://packager.9m-men.michaeltong.clockit.exp.direct",
-  "ngrokPid": 15332,
   "devToolsPort": 19002,
-  "expoServerPort": 19000
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+  "webpackServerPort": null
 }
