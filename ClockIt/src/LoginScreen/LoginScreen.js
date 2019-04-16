@@ -112,7 +112,7 @@ static navigationOptions = {
 
     // After ths user logs in, redirect them
 
-    this.props.navigation.navigate('Overview');
+    this.props.navigation.navigate('Timeclock');
   }
 
   render() {
