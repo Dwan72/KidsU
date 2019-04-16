@@ -1,65 +1,33 @@
-// import React, { Component } from 'react';
-// import { Container, Header, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
-
-// export default class LoginScreen extends Component {
-    
-//     loginPressed = () => {
-//         this.props.navigation.navigate('Overview')
-//     }
-//     static navigationOptions = {
-//         header: null,
-//         title: null,
-//     };
-  
-//     render() {
-//     return (
-//         <Container>
-//             <Header>
-//                 <Text>this is a header</Text>
-//             </Header>
-//             <Content>
-
-//                 <Form>
-//                     <Item inlineLabel>
-//                         <Label>Username</Label>
-//                     <Input />
-//                     </Item>
-//                     <Item inlineLabel last>
-//                         <Label>Password</Label>
-//                     <Input />
-//                     </Item>
-//                 </Form>
-            
-//                 <Button block success
-//                     style={{ marginLeft: 10, marginRight: 10}}
-//                     onPress={this.loginPressed}
-//                 >
-//                     <Text>Login</Text>
-//                 </Button>
-//             </Content>
-//         </Container>
-//     );
-//   }
-// }
-
 import React from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity, TextInput
+  StyleSheet, Text, View, TouchableOpacity, TextInput, Image,Button
 } from 'react-native';
+
+import KIDS from './KIDSU.png';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#FBFBFB',
+
     alignItems: 'center',
-    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#2f5eaa',
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    height: 600,
+    width: 330,
+    top: 150,
+    left: 40,
+
   },
 
-  loginContainer: {
-    padding: 20
+  logincontainer:{
+    backgroundColor: '#2d2d29',
   },
+
   input: {
-    height: 40,
+    height: 50,
     backgroundColor: 'rgba(225,225,225,0.2)',
     marginBottom: 10,
     padding: 10,
@@ -71,6 +39,18 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     width: 200
   },
+  button2Container: {
+    backgroundColor: '#56ce46',
+    paddingVertical: 15,
+    width: 200,
+    height: 20,
+    top: 10,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
+
   buttonText: {
     color: '#000',
     textAlign: 'center',
@@ -80,9 +60,11 @@ const styles = StyleSheet.create({
   text: {
     color: '#D61A3A',
     fontSize: 20,
-    marginBottom: 30
+    marginBottom: 30,
+    marginTop: 30,
 
-  }
+  },
+
 });
 
 
@@ -93,13 +75,9 @@ export default class Login extends React.Component {
       email: '',
       password: ''
     };
-
-  //  this.onButtonPress = this.onButtonPress.bind(this);
   }
-static navigationOptions = {
-    header: null,
-    title: null,
-};
+
+
 
   onButtonPress = () => {
 
@@ -111,17 +89,21 @@ static navigationOptions = {
     console.log('hello I am clicked', password, email);
 
     // After ths user logs in, redirect them
-
+    //  this.props.navigation.navigate('Overview');
     this.props.navigation.navigate('Timeclock');
   }
 
+
+
   render() {
-
-    const {navigate} = this.props.navigation;
-
     return (
       <View style={styles.container}>
         <Text style={styles.text}> KIDS-U </Text>
+        <Image
+        style={{width: 200, height: 200, marginBottom: 20}}
+         source={require('./KIDSU.png')}
+          />
+
         <TextInput
           style={styles.input}
           autoCapitalize="none"
@@ -145,9 +127,13 @@ static navigationOptions = {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={this.onButtonPress}
-          >
-          <Text style={styles.buttonText } onPress={()=> navigate('HomeScreen')}>LOGIN</Text>
+        >
+          <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
+
+          <Text onPress = {() => this.props.navigation.navigate('CreateAccount')}>Create Account</Text>
+          <Text onPress = {() => this.props.navigation.navigate('ForgotPassword')}>ForgotPassword</Text>
+
 
 
       </View>

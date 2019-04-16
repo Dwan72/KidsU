@@ -4,10 +4,21 @@ import { Container, Header, Content, Form, Item, Input, Label, Button, Text,
 
 export default class CreateAccount extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstname: '',
+      lastname: '',
+      email:'',
+      birthday:'',
+      gender:'',
+      password:''
+    };
+  }
 
 
   loginPressed = () => {
-     this.props.navigation.navigate('Timeclock')
+     this.props.navigation.navigate('Overview')
      }
 
        render() {
