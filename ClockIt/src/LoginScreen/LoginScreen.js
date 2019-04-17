@@ -86,11 +86,11 @@ export default class Login extends React.Component {
     // Make a call to your backend database and try to find that user
     // If there is a user in the database with this email and password then you will log them in and then redirect them somewhere
     const { password, email } = this.state;
-    console.log('hello I am clicked', password, email);
+    console.log('Email:', email, 'Password:', password);
 
     // After ths user logs in, redirect them
     //  this.props.navigation.navigate('Overview');
-    this.props.navigation.navigate('Timeclock');
+    this.props.navigation.navigate('Overview');
   }
 
 
@@ -132,7 +132,7 @@ export default class Login extends React.Component {
         </TouchableOpacity>
 
           <Text onPress = {() => this.props.navigation.navigate('CreateAccount')}>Create Account</Text>
-          <Text onPress = {() => this.props.navigation.navigate('ForgotPassword')}>ForgotPassword</Text>
+          <Text onPress = {() => this.props.navigation.navigate('ForgotPassword')}>Forgot Password</Text>
 
 
 
