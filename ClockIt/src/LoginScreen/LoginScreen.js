@@ -131,7 +131,7 @@ export default class Login extends React.Component {
           <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
 
-          <Text onPress = {() => this.props.navigation.navigate('CreateAccount')}>Create Account</Text>
+          <Text onPress = {() => this.props.navigation.navigate('Create Account')}>Create Account</Text>
           <Text onPress = {() => this.props.navigation.navigate('ForgotPassword')}>Forgot Password</Text>
 
 
