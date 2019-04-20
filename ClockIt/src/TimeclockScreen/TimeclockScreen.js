@@ -3,7 +3,7 @@ import Fragment from 'react';
 import Component from 'react'; 
 import TimerMachine from 'react-timer-machine'
 import { TouchableHighlight,TextInput, FlatList, AppRegistry, TouchableOpacity, StyleSheet, Alert, View, Text } from 'react-native';
-import { Container, Header, Content, Textarea, Form, List, ListItem, Separator, Right, Left, Footer, FooterTab, Button, Icon, Body, Title } from 'native-base';
+import { Spinner, Container, Header, Content, Textarea, Form, List, ListItem, Separator, Right, Left, Footer, FooterTab, Button, Icon, Body, Title } from 'native-base';
 
 
 export default class TimeClockScreen extends React.Component {
@@ -13,6 +13,7 @@ export default class TimeClockScreen extends React.Component {
     super(props);
     this._pushNotes= this._pushNotes.bind(this);
     this.state = { 
+      spinnerOpacity: 1,
       count: 0, 
       toggle: true,
       arrayHolder: [{
@@ -71,7 +72,52 @@ toggle = () => {
  
   }
 
-// Used for Clock In and Clock Out toggle.
+  trytest() {
+
+fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
+  headers: {
+    'Content-Type': 'application/json'
+  },
+}).then(function(json) {
+    console.log('request succeeded with json response', json)
+  }).catch(function(error) {
+    console.log('request failed', error)
+  })
+
+  }
+
+clockingIn() {
+
+  // if validate location, then invoke _onPress
+  var geoOptions = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+
+    function success(pos) {
+  var crd = pos.coords;
+
+  console.log('Your current position is:');
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+  console.log(`More or less ${crd.accuracy} meters.`);
+}
+
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+  return navigator.geolocation.getCurrentPosition(success, error, geoOptions);
+
+
+
+
+}
+
+validateLocation() {
+
+}
 _onPress() {
   const newState = !this.state.toggle;
   this.setState({toggle:newState})
@@ -133,6 +179,10 @@ clockingOut = () => {
     const changeOnClock = toggle?"Off the clock":"On the clock";
     const changetimerBox = toggle?"woopdewoop":"timerBox";
 
+    const spinnerOpacity = this.state.spinnerOpacity;
+
+
+
 
     return (
     
@@ -172,7 +222,7 @@ clockingOut = () => {
                     value={this.state.textInput_Holder} />
 
 
-      <TouchableOpacity onPress={()=>this._onPress()} disabled={changeInvisible} 
+      <TouchableOpacity onPress={()=>this.clockingIn()} disabled={changeInvisible} 
         activeOpacity={0.5} style={[styles.buttonClockInOut, {backgroundColor:changeBGColor, opacity:changeVisible}]}
       >
       <Text style={styles.text}> Clock In
@@ -198,6 +248,13 @@ clockingOut = () => {
         />
 
 </List>
+      <TouchableOpacity onPress={()=>this.clockingIn()}
+        activeOpacity={0.5} style={[styles.buttonClockInOut]}
+      >
+      <Text style={styles.text}> Test Location API
+         </Text>
+       </TouchableOpacity>
+
 
            
             </Content>

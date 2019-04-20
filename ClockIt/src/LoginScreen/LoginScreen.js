@@ -90,7 +90,7 @@ export default class Login extends React.Component {
 
     // After ths user logs in, redirect them
     //  this.props.navigation.navigate('Overview');
-    this.props.navigation.navigate('Overview');
+    this.props.navigation.navigate('Timeclock');
   }
 
 
@@ -131,9 +131,8 @@ export default class Login extends React.Component {
           <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
 
-          <Text onPress = {() => this.props.navigation.navigate('Create Account')}>Create Account</Text>
-          <Text onPress = {() => this.props.navigation.navigate('ForgotPassword')}>Forgot Password</Text>
 
+          <Text onPress = {() => this.props.navigation.navigate('CreateAccount')}>Create Account</Text>
 
 
       </View>

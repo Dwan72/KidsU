@@ -66,33 +66,55 @@ export default class CreateAccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      user:'', 
+      password:'',
       firstname: '',
       lastname: '',
       email:'',
-      phonenumber: '',
-      birthday:'',
-      gender:'',
-      position: '',
-      password:''
+
     };
   }
 
   onButtonPress = () => {
-    const {firstname, lastname, email, phonenumber, birthday, gender,position,password} = this.state;
-    console.log('First Name:', firstname,
+    const {user, password, firstname, lastname, email} = this.state;
+    console.log(
+      'Username:', user,
+      'Password:', password,
+      'First Name:', firstname,
     'Last Name:', lastname,
     'Email:', email,
-    'Phone number:', phonenumber,
-    'Birthday:', birthday,
-    'Gender:', gender,
-    'Position:', position,
-    'Password:', password
   );
 
-  }
+    fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/register', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    user: user,
+    password: password, 
+    fname: firstname,
+    lname: lastname, 
+    email: email,
+  })
+}).then(function(json) {
+    console.log('request succeeded with json response', json)
+  }).catch(function(error) {
+    console.log('request failed', error)
+  })
 
 
+}
+  createAccount = () => {
 
+
+    const {user, password, firstname, lastname, email} = this.state;
+
+
+}
+
+  
 
        render() {
 
@@ -101,15 +123,6 @@ export default class CreateAccount extends React.Component {
        return (
         <View  style={styles.container}>
 
-        <Picker
-        selectedValue={this.state.language}
-        style={{height: 50, width: 115, top: 90}}
-        onValueChange={(itemValue, itemIndex) =>
-          this.setState({language: itemValue})
-        }>
-        <Picker.Item label="Admin" value="Admin" />
-        <Picker.Item label="Employee" value="Employee" />
-        </Picker>
 
         <TextInput
           style={styles.input}
@@ -118,7 +131,7 @@ export default class CreateAccount extends React.Component {
           autoCorrect={false}
           keyboardType="email-address"
           returnKeyType="next"
-          placeholder="Firstname"
+          placeholder="First Name"
           placeholderTextColor="#050506"
         />
 
@@ -129,7 +142,30 @@ export default class CreateAccount extends React.Component {
           autoCorrect={false}
           keyboardType="email-address"
           returnKeyType="next"
-          placeholder="Lastname"
+          placeholder="Last Name"
+          placeholderTextColor="#050506"
+        />
+
+
+        <TextInput
+          style={styles.input}
+          autoCapitalize="none"
+          onChangeText={user => this.setState({ user })}
+          autoCorrect={false}
+          keyboardType="email-address"
+          returnKeyType="next"
+          placeholder="Username"
+          placeholderTextColor="#050506"
+        />
+
+        <TextInput
+          style={styles.input}
+          autoCapitalize="none"
+          onChangeText={password => this.setState({ password })}
+          autoCorrect={false}
+          keyboardType="email-address"
+          returnKeyType="next"
+          placeholder="Password"
           placeholderTextColor="#050506"
         />
         <TextInput
@@ -142,67 +178,12 @@ export default class CreateAccount extends React.Component {
           placeholder="Email"
           placeholderTextColor="#050506"
         />
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={phonenumber => this.setState({ phonenumber })}
-          autoCorrect={false}
-          keyboardType="phone-pad"
-          returnKeyType="next"
-          placeholder="Phone number"
-          placeholderTextColor="#050506"
-        />
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={birthday => this.setState({ birthday })}
-          autoCorrect={false}
-          keyboardType="number-pad"
-          returnKeyType="number"
-          placeholder="Birthday"
-          placeholderTextColor="#050506"
-        />
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={gender => this.setState({ gender })}
-          autoCorrect={false}
-          keyboardType="default"
-          returnKeyType="next"
-          placeholder="Gender"
-          placeholderTextColor="#050506"
-        />
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={position => this.setState({ position })}
-          autoCorrect={false}
-          keyboardType="default"
-          returnKeyType="next"
-          placeholder="Position"
-          placeholderTextColor="#050506"
-        />
-
-        <TextInput
-          style={styles.input}
-          returnKeyType="go"
-          onChangeText={password => this.setState({ password })}
-          placeholder="Password"
-          placeholderTextColor="#050506"
-          secureTextEntry
-        />
-
 
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={this.onButtonPress}>
-          <Text>Send</Text>
+          <Text>Submit</Text>
           </TouchableOpacity>
-
-
 
         </View>
        );
