@@ -7,7 +7,7 @@ import KIDS from './KIDSU.png';
 
 const styles = StyleSheet.create({
   container: {
-
+    flex: 0,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#2f5eaa',
@@ -33,23 +33,14 @@ const styles = StyleSheet.create({
     padding: 10,
     color: '#393C3D',
     width: 200
+
   },
   buttonContainer: {
     backgroundColor: '#E7E9EA',
     paddingVertical: 15,
     width: 200
   },
-  button2Container: {
-    backgroundColor: '#56ce46',
-    paddingVertical: 15,
-    width: 200,
-    height: 20,
-    top: 10,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-  },
+
 
   buttonText: {
     color: '#000',
@@ -61,7 +52,10 @@ const styles = StyleSheet.create({
     color: '#D61A3A',
     fontSize: 20,
     marginBottom: 30,
-    marginTop: 30,
+    marginTop: 30
+  },
+  CALink: {
+    top: 30
 
   },
 
@@ -98,6 +92,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+
         <Text style={styles.text}> KIDS-U </Text>
         <Image
         style={{width: 200, height: 200, marginBottom: 20}}
@@ -132,7 +127,7 @@ export default class Login extends React.Component {
         </TouchableOpacity>
 
 
-          <Text onPress = {() => this.props.navigation.navigate('CreateAccount')}>Create Account</Text>
+          <Text  style={styles.CALink} onPress = {() => this.props.navigation.navigate('CreateAccount')}>Create Account</Text>
 
 
       </View>

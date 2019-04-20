@@ -8,21 +8,16 @@ const styles = StyleSheet.create({
   container: {
 
     backgroundColor: '#ffffff',
+    flex: 1,
     alignItems: 'center',
     width: 415,
     height: 880
+
 
   },
 
 
   text: {
-    color: '#000000',
-    fontSize: 40,
-    marginBottom: 30,
-    marginTop: 30,
-    textAlign:'center',
-    top:70
-
 
   },
   input: {
@@ -40,15 +35,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
 
-
-
   },
 
   buttonContainer: {
     backgroundColor: '#E7E9EA',
     padding: 10,
     width: 100,
-    left: 120,
+    left: 100,
     top: 120,
     borderWidth: 2,
     borderColor: '#ffffff',
@@ -56,6 +49,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+
   },
 
 });
@@ -66,13 +60,14 @@ export default class CreateAccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user:'', 
+      user:'',
       password:'',
       firstname: '',
       lastname: '',
       email:'',
 
     };
+
   }
 
   onButtonPress = () => {
@@ -85,6 +80,8 @@ export default class CreateAccount extends React.Component {
     'Email:', email,
   );
 
+    alert('Account created! Please wait for Approval.');
+
     fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/register', {
   method: 'POST',
   headers: {
@@ -93,9 +90,9 @@ export default class CreateAccount extends React.Component {
   },
   body: JSON.stringify({
     user: user,
-    password: password, 
+    password: password,
     fname: firstname,
-    lname: lastname, 
+    lname: lastname,
     email: email,
   })
 }).then(function(json) {
@@ -103,6 +100,7 @@ export default class CreateAccount extends React.Component {
   }).catch(function(error) {
     console.log('request failed', error)
   })
+
 
 
 }
@@ -114,7 +112,8 @@ export default class CreateAccount extends React.Component {
 
 }
 
-  
+
+
 
        render() {
 
@@ -133,6 +132,8 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="First Name"
           placeholderTextColor="#050506"
+          clearButtonMode="always"
+
         />
 
         <TextInput
@@ -144,6 +145,7 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Last Name"
           placeholderTextColor="#050506"
+          clearButtonMode="always"
         />
 
 
@@ -156,6 +158,7 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Username"
           placeholderTextColor="#050506"
+          clearButtonMode="always"
         />
 
         <TextInput
@@ -167,6 +170,7 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Password"
           placeholderTextColor="#050506"
+          clearButtonMode="always"
         />
         <TextInput
           style={styles.input}
@@ -177,12 +181,13 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Email"
           placeholderTextColor="#050506"
+          clearButtonMode="always"
         />
 
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={this.onButtonPress}>
-          <Text>Submit</Text>
+          <Text  style={styles.text} >Submit</Text>
           </TouchableOpacity>
 
         </View>
