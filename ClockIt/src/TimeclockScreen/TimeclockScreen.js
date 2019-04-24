@@ -72,23 +72,18 @@ toggle = () => {
  
   }
 
-  trytest() {
+  trytest = () =>  {
 
 fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
   headers: {
     'Content-Type': 'application/json'
   },
 }).then(function(json) {
-    console.log('request succeeded with json response', json)
-  }).catch(function(error) {
-    console.log('request failed', error)
-  })
-
-  }
-
-clockingIn() {
-
-  // if validate location, then invoke _onPress
+    console.log('request succeeded with json response', JSON.parse(json._bodyText)[0].xcoord)
+    var xlocation = JSON.parse(json._bodyText)[0].xcoord;
+    var ylocation = JSON.parse(json._bodyText)[0].ycoord;
+    console.log('hi1');
+// validate location
   var geoOptions = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -102,6 +97,48 @@ clockingIn() {
   console.log(`Latitude : ${crd.latitude}`);
   console.log(`Longitude: ${crd.longitude}`);
   console.log(`More or less ${crd.accuracy} meters.`);
+
+  var currentLat = crd.latitude*1000000;
+  var currentLon = crd.longitude*1000000;
+  console.log(currentLat, currentLon);
+
+  var maxxlocation = xlocation + 2000000;
+  var minxlocation = xlocation - 2000000;
+  var maxylocation = ylocation + 2000000;
+  var minylocation = ylocation - 2000000; 
+
+  if ((minxlocation < currentLon && currentLon < maxxlocation) && 
+    (minylocation < currentLat && currentLat < maxylocation))
+  {
+    var timestamp = Date.now()/1000;
+
+        fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    user: "notadmin1",
+    clockInTime: timestamp,
+  })
+}).then(function(json) {
+    console.log('request succeeded with json response', json);
+    this.clockingIn();
+  }).catch(function(error) {
+    console.log('request failed', error);
+  });
+
+  }
+  else 
+    Alert.alert(
+      "You are not in the designated area",
+      "Please be within xxx feet of the location.",
+      [
+        { text: "Ok", onPress: () => console.log("Ok Pressed") },
+      ],
+      { cancelable: false }
+    );
 }
 
 function error(err) {
@@ -111,14 +148,20 @@ function error(err) {
   return navigator.geolocation.getCurrentPosition(success, error, geoOptions);
 
 
+// end of validating location
+
+  }).catch(function(error) {
+    console.log('request failed', error)
+  })
 
 
-}
+  }
+
 
 validateLocation() {
 
 }
-_onPress() {
+clockingIn() {
   const newState = !this.state.toggle;
   this.setState({toggle:newState})
 }
@@ -166,10 +209,6 @@ clockingOut = () => {
   render() {
 
 
-      const admin = 0;
-      var adminText = " zz"
-      var min = 0;
-
     const { navigate } = this.props.navigation;
     const {toggle} = this.state;
     // Colors can be changed
@@ -200,13 +239,6 @@ clockingOut = () => {
             <Content>
 
 <List>
-                        <ListItem>
-                            <View style = {styles.label}>
-                               
-                                    <Text>DAY TOTAL</Text><Text>testing</Text>
-                               
-                            </View>     
-                        </ListItem>
 
                         <ListItem>
                         <View style = {styles.label}>
@@ -248,7 +280,7 @@ clockingOut = () => {
         />
 
 </List>
-      <TouchableOpacity onPress={()=>this.clockingIn()}
+      <TouchableOpacity onPress={()=>this.trytest()}
         activeOpacity={0.5} style={[styles.buttonClockInOut]}
       >
       <Text style={styles.text}> Test Location API
