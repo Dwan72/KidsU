@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Text,
-   View } from 'native-base';
-import {StyleSheet,TextInput,TouchableOpacity, Image, Button, Picker} from 'react-native';
+import { Container, Header, Content, Form, Item, Input, Label, Text, View } from 'native-base';
+import {StyleSheet,TextInput,TouchableOpacity, Image, Button, Picker, Alert} from 'react-native';
 
 const styles = StyleSheet.create({
 
   container: {
-
     backgroundColor: '#ffffff',
     flex: 1,
     alignItems: 'center',
     width: 415,
     height: 880
-
-
   },
-
-
   text: {
 
   },
@@ -34,9 +28,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-
   },
-
   buttonContainer: {
     backgroundColor: '#E7E9EA',
     padding: 10,
@@ -49,14 +41,10 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-
   },
-
 });
 
-
 export default class CreateAccount extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -65,9 +53,7 @@ export default class CreateAccount extends React.Component {
       firstname: '',
       lastname: '',
       email:'',
-
     };
-
   }
 
   onButtonPress = () => {
@@ -80,9 +66,9 @@ export default class CreateAccount extends React.Component {
     'Email:', email,
   );
 
-    alert('Account created! Please wait for Approval.');
+  alert('Account created! Please wait for Approval.');
 
-    fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/register', {
+  fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/register', {
   method: 'POST',
   headers: {
     'Accept': 'application/json',
@@ -100,29 +86,16 @@ export default class CreateAccount extends React.Component {
   }).catch(function(error) {
     console.log('request failed', error)
   })
-
-
-
 }
-  createAccount = () => {
 
-
+createAccount = () => {
     const {user, password, firstname, lastname, email} = this.state;
-
-
 }
 
-
-
-
-       render() {
-
-      const { navigate } = this.props.navigation;
-
+  render() {
+    const { navigate } = this.props.navigation;
        return (
         <View  style={styles.container}>
-
-
         <TextInput
           style={styles.input}
           autoCapitalize="none"
@@ -132,10 +105,7 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="First Name"
           placeholderTextColor="#050506"
-          clearButtonMode="always"
-
-        />
-
+          clearButtonMode="always"/>
         <TextInput
           style={styles.input}
           autoCapitalize="none"
@@ -145,10 +115,7 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Last Name"
           placeholderTextColor="#050506"
-          clearButtonMode="always"
-        />
-
-
+          clearButtonMode="always"/>
         <TextInput
           style={styles.input}
           autoCapitalize="none"
@@ -158,9 +125,7 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Username"
           placeholderTextColor="#050506"
-          clearButtonMode="always"
-        />
-
+          clearButtonMode="always"/>
         <TextInput
           style={styles.input}
           autoCapitalize="none"
@@ -170,8 +135,7 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Password"
           placeholderTextColor="#050506"
-          clearButtonMode="always"
-        />
+          clearButtonMode="always"/>
         <TextInput
           style={styles.input}
           autoCapitalize="none"
@@ -181,15 +145,12 @@ export default class CreateAccount extends React.Component {
           returnKeyType="next"
           placeholder="Email"
           placeholderTextColor="#050506"
-          clearButtonMode="always"
-        />
-
+          clearButtonMode="always"/>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={this.onButtonPress}>
           <Text  style={styles.text} >Submit</Text>
           </TouchableOpacity>
-
         </View>
        );
      }

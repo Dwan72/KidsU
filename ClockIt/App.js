@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import LoginScreenRouter from './src/LoginScreen/index'
 
-
-
 export default class ClockIt extends Component {
   constructor(props) {
     super(props);
@@ -16,17 +14,10 @@ export default class ClockIt extends Component {
     });
     this.setState({ loading: false });
   }
-
-
   render() {
     if (this.state.loading) {
       return <Expo.AppLoading />;
     }
     return <LoginScreenRouter />;
   }
-
-
-
-
-
 }

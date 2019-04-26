@@ -36,7 +36,7 @@ export default class AddTimesheet extends Component {
         });
         this.handleEndDatePickerHide();
     }
-    
+
 
     render() {
 
@@ -45,7 +45,6 @@ export default class AddTimesheet extends Component {
         return(
             <Container>
                 <Header>
-                    
                     <Left>
                         <Button
                             onPress = {() => this.props.navigation.navigate('Timesheet')}
@@ -59,27 +58,22 @@ export default class AddTimesheet extends Component {
                     <Right />
                 </Header>
                 <Content>
-
                     <List>
                         <ListItem>
                             <View style = {styles.label}>
-                                <TouchableOpacity 
-                                    onPress={this.handleStartDatePress}
-                                    >
+                                <TouchableOpacity
+                                    onPress={this.handleStartDatePress}>
                                     <Text>Start Time</Text>
-                                </TouchableOpacity>   
-                            </View>     
-
+                                </TouchableOpacity>
+                            </View>
                             <View style = {styles.time}>
                                 <TextInput
                                     placeholder="Time"
                                     spellCheck={false}
                                     value={this.state.startTime.toString()}
                                     editable={!this.state.showStartDatePicker}
-                                    onFocus={this.handleStartDatePress}
-                                />
+                                    onFocus={this.handleStartDatePress}/>
                             </View>
-
                             <DateTimePicker
                                 isVisible={this.state.showStartDatePicker}
                                 onConfirm={this.handleStartDatePicked}
@@ -92,12 +86,12 @@ export default class AddTimesheet extends Component {
 
                         <ListItem>
                         <View style = {styles.label}>
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     onPress={this.handleEndDatePress}
                                     >
                                     <Text>End Time</Text>
-                                </TouchableOpacity>   
-                            </View>     
+                                </TouchableOpacity>
+                            </View>
 
                             <View style = {styles.time}>
                                 <TextInput
@@ -116,7 +110,7 @@ export default class AddTimesheet extends Component {
                                 mode={'datetime'}
                                 is24Hour={false}
                             />
-                            
+
                         </ListItem>
 
                         <ListItem>
@@ -144,7 +138,7 @@ export default class AddTimesheet extends Component {
                         </Button>
                     </FooterTab>
                 </Footer>
-            
+
             </Container>
         );
     }
