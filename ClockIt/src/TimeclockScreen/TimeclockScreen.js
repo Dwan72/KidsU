@@ -55,6 +55,10 @@ joinData = () => {
   console.log("Cancel Pressed")
 }
 
+test = () => {
+  console.log('1111');
+}
+
 toggle = () => {
 	this.setState({
 		on: !this.state.on
@@ -72,17 +76,21 @@ toggle = () => {
  
   }
 
-  trytest = () =>  {
+
+
+
+  trytest() {
 
 fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
   headers: {
     'Content-Type': 'application/json'
   },
 }).then(function(json) {
-    console.log('request succeeded with json response', JSON.parse(json._bodyText)[0].xcoord)
+    console.log('request succeeded with json response111', JSON.parse(json._bodyText)[0].xcoord)
     var xlocation = JSON.parse(json._bodyText)[0].xcoord;
     var ylocation = JSON.parse(json._bodyText)[0].ycoord;
     console.log('hi1');
+    console.log(this);
 // validate location
   var geoOptions = {
     enableHighAccuracy: true,
@@ -90,7 +98,7 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
     maximumAge: 0
   };
 
-    function success(pos) {
+  async function success(pos) {
   var crd = pos.coords;
 
   console.log('Your current position is:');
@@ -112,7 +120,7 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
   {
     var timestamp = Date.now()/1000;
 
-        fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+        await fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
   method: 'POST',
   headers: {
     'Accept': 'application/json',
@@ -123,12 +131,11 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
     clockInTime: timestamp,
   })
 }).then(function(json) {
-    console.log('request succeeded with json response', json);
-    this.clockingIn();
+    console.log('request succeeded with json response222', json);   
+    () => this.test();
   }).catch(function(error) {
     console.log('request failed', error);
-  });
-
+  }).bind(this);
   }
   else 
     Alert.alert(
@@ -145,7 +152,7 @@ function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
 
-  return navigator.geolocation.getCurrentPosition(success, error, geoOptions);
+  navigator.geolocation.getCurrentPosition(success, error, geoOptions);
 
 
 // end of validating location
@@ -221,8 +228,6 @@ clockingOut = () => {
     const spinnerOpacity = this.state.spinnerOpacity;
 
 
-
-
     return (
     
 
@@ -254,7 +259,7 @@ clockingOut = () => {
                     value={this.state.textInput_Holder} />
 
 
-      <TouchableOpacity onPress={()=>this.clockingIn()} disabled={changeInvisible} 
+      <TouchableOpacity onPress={()=>this.trytest()} disabled={changeInvisible} 
         activeOpacity={0.5} style={[styles.buttonClockInOut, {backgroundColor:changeBGColor, opacity:changeVisible}]}
       >
       <Text style={styles.text}> Clock In
@@ -280,22 +285,15 @@ clockingOut = () => {
         />
 
 </List>
-      <TouchableOpacity onPress={()=>this.trytest()}
+      <TouchableOpacity onPress={()=>this.clockingIn()}
         activeOpacity={0.5} style={[styles.buttonClockInOut]}
       >
       <Text style={styles.text}> Test Location API
          </Text>
        </TouchableOpacity>
-
-
            
             </Content>
           </Container>
-
-
-
-
-
 
 );
   }
