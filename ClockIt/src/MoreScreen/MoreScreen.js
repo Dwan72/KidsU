@@ -66,6 +66,8 @@ export default class MoreScreen extends React.Component {
     }
 
     render() {
+      const { navigate } = this.props.navigation;
+
       if(!this.state.logoutPressed) {
         return (
           <Container>
