@@ -11,7 +11,6 @@ export default class TimeClockScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this._pushNotes= this._pushNotes.bind(this);
     this.state = { 
       spinnerOpacity: 1,
       count: 0, 
@@ -55,8 +54,9 @@ joinData = () => {
   console.log("Cancel Pressed")
 }
 
-test = () => {
+test(callback) {
   console.log('1111');
+  callback();
 }
 
 toggle = () => {
@@ -79,7 +79,7 @@ toggle = () => {
 
 
 
-  trytest() {
+  trytest(callback) {
 
 fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
   headers: {
@@ -89,8 +89,7 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
     console.log('request succeeded with json response111', JSON.parse(json._bodyText)[0].xcoord)
     var xlocation = JSON.parse(json._bodyText)[0].xcoord;
     var ylocation = JSON.parse(json._bodyText)[0].ycoord;
-    console.log('hi1');
-    console.log(this);
+
 // validate location
   var geoOptions = {
     enableHighAccuracy: true,
@@ -98,7 +97,11 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
     maximumAge: 0
   };
 
-  async function success(pos) {
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+  function success(pos) {
   var crd = pos.coords;
 
   console.log('Your current position is:');
@@ -120,7 +123,7 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
   {
     var timestamp = Date.now()/1000;
 
-        await fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
   method: 'POST',
   headers: {
     'Accept': 'application/json',
@@ -132,12 +135,13 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
   })
 }).then(function(json) {
     console.log('request succeeded with json response222', json);   
-    () => this.test();
+    callback();
   }).catch(function(error) {
     console.log('request failed', error);
-  }).bind(this);
+  })
   }
   else 
+  {
     Alert.alert(
       "You are not in the designated area",
       "Please be within xxx feet of the location.",
@@ -146,14 +150,14 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
       ],
       { cancelable: false }
     );
+  }
 }
 
-function error(err) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
-}
+return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(success, error, geoOptions);
+  })
 
-  navigator.geolocation.getCurrentPosition(success, error, geoOptions);
-
+  
 
 // end of validating location
 
@@ -161,9 +165,13 @@ function error(err) {
     console.log('request failed', error)
   })
 
-
   }
 
+trysuccess() {
+this.trytest(() => {this.clockingIn();})
+
+
+}
 
 validateLocation() {
 
@@ -198,11 +206,32 @@ _pushNotes() {
 
 
 clockingOut = () => {
+  var timestamp = Date.now()/1000;
+
+function clockOutAPI(callback) {
+ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    user: "notadmin1",
+    clockInTime: timestamp,
+  })
+}).then(function(json) {
+    console.log('request succeeded with json response333333', json);   
+    callback();
+  }).catch(function(error) {
+    console.log('request failed', error);
+  })
+}
+
     Alert.alert(
       "You are clocking out",
       "Are you sure?",
       [
-        { text: "Yes", onPress: () => this._pushNotes() },
+        { text: "Yes", onPress: () => clockOutAPI(() => {this._pushNotes();}) },
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
@@ -259,7 +288,7 @@ clockingOut = () => {
                     value={this.state.textInput_Holder} />
 
 
-      <TouchableOpacity onPress={()=>this.trytest()} disabled={changeInvisible} 
+      <TouchableOpacity onPress={()=>this.trysuccess()} disabled={changeInvisible} 
         activeOpacity={0.5} style={[styles.buttonClockInOut, {backgroundColor:changeBGColor, opacity:changeVisible}]}
       >
       <Text style={styles.text}> Clock In
@@ -285,13 +314,6 @@ clockingOut = () => {
         />
 
 </List>
-      <TouchableOpacity onPress={()=>this.clockingIn()}
-        activeOpacity={0.5} style={[styles.buttonClockInOut]}
-      >
-      <Text style={styles.text}> Test Location API
-         </Text>
-       </TouchableOpacity>
-           
             </Content>
           </Container>
 
