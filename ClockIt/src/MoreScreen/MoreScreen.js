@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text, Card, CardItem } from "native-base";
 import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import LoginScreenRouter from '../LoginScreen/index'
+import LoginScreenRouter from '../LoginScreen/index';
 
 const styles = StyleSheet.create({
     userTitle: {

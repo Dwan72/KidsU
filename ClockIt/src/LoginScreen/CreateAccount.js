@@ -2,21 +2,15 @@ import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Text,
    View } from 'native-base';
 import {StyleSheet,TextInput,TouchableOpacity, Image, Button, Picker} from 'react-native';
+import LoginScreenRouter from '../LoginScreen/index';
 
 const styles = StyleSheet.create({
-
   container: {
-
     backgroundColor: '#ffffff',
-    flex: 1,
     alignItems: 'center',
-    width: 415,
+    width: 350,
     height: 880
-
-
   },
-
-
   text: {
 
   },
@@ -35,11 +29,23 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  buttonContainer: {
+  submitButtonContainer: {
     backgroundColor: '#E7E9EA',
     padding: 10,
     width: 80,
     marginTop: 120,
+    borderWidth: 2,
+    borderColor: '#ffffff',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  backButtonContainer: {
+    backgroundColor: '#E7E9EA',
+    padding: 10,
+    width: 60,
+    marginTop: 30,
     borderWidth: 2,
     borderColor: '#ffffff',
     borderBottomLeftRadius: 20,
@@ -64,7 +70,6 @@ const styles = StyleSheet.create({
   }
 });
 
-
 export default class CreateAccount extends React.Component {
 
   constructor(props) {
@@ -75,11 +80,12 @@ export default class CreateAccount extends React.Component {
       firstname: '',
       lastname: '',
       email:'',
-      ValidPWd: true
+      ValidPWd: true,
+      submissionFinished: false,
     };
   }
 
-  onButtonPress = () => {
+  onSubmitButtonPress = () => {
     const {user, password, firstname, lastname, email} = this.state;
     console.log(
       'Username:', user,
@@ -90,7 +96,7 @@ export default class CreateAccount extends React.Component {
   );
 
       if (user == '' || password  == '' || firstname  == ''  || lastname  == ''  || email  == '' ){
-          alert('Please Fill out All the values');
+          alert('Please fill out ALL the values');
         }
       else{
         fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/register', {
@@ -111,11 +117,16 @@ export default class CreateAccount extends React.Component {
       }).catch(function(error) {
           console.log('request failed', error)
       })
-        alert('Account created! Please wait for Approval.');
+        alert('Account created! Please wait for approval.');
+        this.setState({submissionFinished: true});
       }
-    }
+}
 
-    validatePassword = () =>{
+onBackButtonPress = () => {
+  this.setState({submissionFinished: true});
+}
+
+validatePassword = () =>{
       //pwd =/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
         const {password} = this.state;
         const len = 8;
@@ -125,75 +136,80 @@ export default class CreateAccount extends React.Component {
         else{
           ValidPWd: false
         }
-    }
+}
 
 render() {
     const { navigate } = this.props.navigation;
 
-     return (
-        <View  style={styles.container}>
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={firstname => this.setState({ firstname })}
-          autoCorrect={false}
-          keyboardType="default"
-          returnKeyType="next"
-          placeholder="First Name"
-          placeholderTextColor="#050506"
-          clearButtonMode="always"/>
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={lastname => this.setState({ lastname })}
-          autoCorrect={false}
-          keyboardType="email-address"
-          returnKeyType="next"
-          placeholder="Last Name"
-          placeholderTextColor="#050506"
-          clearButtonMode="always"/>
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={user => this.setState({ user })}
-          autoCorrect={false}
-          keyboardType="email-address"
-          returnKeyType="next"
-          placeholder="Username"
-          placeholderTextColor="#050506"
-          clearButtonMode="always"/>
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={password => this.setState({ password })}
-          autoCorrect={false}
-          keyboardType="default"
-          returnKeyType="go"
-          placeholder="Password"
-          placeholderTextColor="#050506"
-          clearButtonMode="always"/>
-
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          onChangeText={email => this.setState({ email })}
-          autoCorrect={false}
-          keyboardType="email-address"
-          returnKeyType="next"
-          placeholder="Email"
-          placeholderTextColor="#050506"
-          clearButtonMode="always"/>
-
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={this.onButtonPress}>
-            <Text  style={styles.text} >Submit</Text>
-        </TouchableOpacity>
-        </View>
-       );
-     }
-   }
+    if(!this.state.submissionFinished) {
+      return (
+         <View  style={styles.container}>
+         <TextInput
+           style={styles.input}
+           autoCapitalize="none"
+           onChangeText={firstname => this.setState({ firstname })}
+           autoCorrect={false}
+           keyboardType="default"
+           returnKeyType="next"
+           placeholder="First Name"
+           placeholderTextColor="#050506"
+           clearButtonMode="always"/>
+         <TextInput
+           style={styles.input}
+           autoCapitalize="none"
+           onChangeText={lastname => this.setState({ lastname })}
+           autoCorrect={false}
+           keyboardType="email-address"
+           returnKeyType="next"
+           placeholder="Last Name"
+           placeholderTextColor="#050506"
+           clearButtonMode="always"/>
+         <TextInput
+           style={styles.input}
+           autoCapitalize="none"
+           onChangeText={user => this.setState({ user })}
+           autoCorrect={false}
+           keyboardType="email-address"
+           returnKeyType="next"
+           placeholder="Username"
+           placeholderTextColor="#050506"
+           clearButtonMode="always"/>
+         <TextInput
+           style={styles.input}
+           autoCapitalize="none"
+           onChangeText={password => this.setState({ password })}
+           autoCorrect={false}
+           keyboardType="default"
+           returnKeyType="go"
+           placeholder="Password"
+           placeholderTextColor="#050506"
+           clearButtonMode="always"/>
+         <TextInput
+           style={styles.input}
+           autoCapitalize="none"
+           onChangeText={email => this.setState({ email })}
+           autoCorrect={false}
+           keyboardType="email-address"
+           returnKeyType="next"
+           placeholder="Email"
+           placeholderTextColor="#050506"
+           clearButtonMode="always"/>
+         <TouchableOpacity
+           style={styles.submitButtonContainer}
+           onPress={this.onSubmitButtonPress}>
+             <Text  style={styles.text} >Submit</Text>
+         </TouchableOpacity>
+         <TouchableOpacity
+           style={styles.backButtonContainer}
+           onPress={this.onBackButtonPress}>
+             <Text  style={styles.text} >Back</Text>
+         </TouchableOpacity>
+         </View>
+        );
+    } else {
+      return (
+        <LoginScreenRouter />
+      );
+    }
+  }
+}
