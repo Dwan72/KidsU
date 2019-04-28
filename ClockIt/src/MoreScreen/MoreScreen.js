@@ -6,27 +6,21 @@ import LoginScreenRouter from '../LoginScreen/index';
 const styles = StyleSheet.create({
     userTitle: {
     fontWeight: 'bold',
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: '5%',
-    left: '5%',
-    textAlign: 'center'
+    marginTop: 10,
+    marginLeft: 10,
   },
     userValue: {
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: '10%',
-    left: '5%',
-    textAlign: 'center'
+    marginTop: 20,
+    marginLeft: 10,
   },
   exportButtonLogOut: {
     textAlignVertical: 'center',
-    position: 'absolute',
-    bottom: '10%',
-    left: '5%',
+    marginTop: 400,
+    marginLeft: 15,
     textAlign: 'center',
     backgroundColor: '#fa8072',
     padding: 25,
+    width: 115,
     borderRadius: 10
   }
 })
@@ -38,7 +32,7 @@ export default class MoreScreen extends React.Component {
   }
 
   static navigationOptions = {
-        header: null
+    header: null
   }
 
   constructor(props) {
@@ -66,18 +60,26 @@ export default class MoreScreen extends React.Component {
     }
 
     render() {
-      const { navigate } = this.props.navigation;
-
       if(!this.state.logoutPressed) {
+        const { navigate } = this.props.navigation;
         return (
           <Container>
-            <Text style = {styles.userTitle}>User</Text>
-            <Text style = {styles.userValue}>Haleigh Rogers</Text>
-            <TouchableOpacity
-              onPress={()=>this.loggingOut()}
-              style={[styles.exportButtonLogOut]}>
-                <Text>Log Out</Text>
-            </TouchableOpacity>
+            <Header>
+              <Left/>
+                <Body>
+                  <Title>More</Title>
+                </Body>
+              <Right/>
+            </Header>
+            <Content>
+              <Text style = {styles.userTitle}>User</Text>
+              <Text style = {styles.userValue}>Haleigh Rogers</Text>
+              <TouchableOpacity
+                onPress={()=>this.loggingOut()}
+                style={[styles.exportButtonLogOut]}>
+                  <Text>Log Out</Text>
+              </TouchableOpacity>
+            </Content>
           </Container>
         );
       } else {
@@ -85,6 +87,5 @@ export default class MoreScreen extends React.Component {
           <LoginScreenRouter />
         );
       }
-
-      }
+  }
 }

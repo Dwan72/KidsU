@@ -39,7 +39,7 @@ export default class TimeClockScreen extends React.Component {
   }
 
   static navigationOptions = {
-        header: null
+      header: null
   }
 
 joinData = () => {
@@ -75,7 +75,6 @@ fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000
   }
 
 clockingIn() {
-
   // if validate location, then invoke _onPress
   var geoOptions = {
     enableHighAccuracy: true,
@@ -95,9 +94,7 @@ clockingIn() {
 function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
-
   return navigator.geolocation.getCurrentPosition(success, error, geoOptions);
-
 }
 
 validateLocation() {
@@ -179,17 +176,17 @@ clockingOut = () => {
                 <Text>STATUS</Text><Text style = {styles.statusVal}> {changeOnClock} </Text>
             </View>
           </ListItem>
-          </List>
-          <Text style = {styles.Notes}>Notes:</Text>
-          <Textarea style = {styles.navigateNotes} returnKeyType={"done"}
-                    onChangeText={data => this.setState({ textInput_Holder: data })}
-                    blurOnSubmit = {true} rowSpan={8} bordered placeholder="Enter your notes here"
-                    value={this.state.textInput_Holder} />
+        </List>
+        <Text style = {styles.Notes}>Notes:</Text>
+        <Textarea style = {styles.navigateNotes} returnKeyType={"done"}
+          onChangeText={data => this.setState({ textInput_Holder: data })}
+          blurOnSubmit = {true} rowSpan={8} bordered placeholder="Enter your notes here"
+          value={this.state.textInput_Holder} />
 
       <TouchableOpacity onPress={()=>this.clockingIn()} disabled={changeInvisible}
         activeOpacity={0.5} style={[styles.buttonClockInOut,
           {backgroundColor:changeBGColor, opacity:changeVisible}]}>
-      <Text style={styles.text}> Clock In </Text>
+          <Text style={styles.text}> Clock In </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={()=>this.clockingOut()} disabled={changeVisible}
@@ -222,10 +219,10 @@ const styles = StyleSheet.create({
   	textAlignVertical: 'center',
     textAlign: 'center',
     backgroundColor: '#41f46e',
-            flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'stretch',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'stretch',
     padding: 25,
     paddingTop: 30,
     borderRadius: 10,

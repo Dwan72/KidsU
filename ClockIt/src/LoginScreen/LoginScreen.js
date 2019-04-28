@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet, Text, View, TouchableOpacity, TextInput, Image,Button
-} from 'react-native';
-
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image,Button } from 'react-native';
 import KIDS from './KIDSU.png';
 
 const styles = StyleSheet.create({
@@ -61,16 +58,12 @@ export default class Login extends React.Component {
   }
 
   onButtonPress = () => {
-
     // Make sure that the email is a valid email
     // Make sure that the password is at least 8 characters long
     // Make a call to your backend database and try to find that user
     // If there is a user in the database with this email and password then you will log them in and then redirect them somewhere
     const { password, email } = this.state;
     console.log('Email:', email, 'Password:', password);
-
-    // After ths user logs in, redirect them
-    //  this.props.navigation.navigate('Overview');
     this.props.navigation.navigate('Timeclock');
   }
 
