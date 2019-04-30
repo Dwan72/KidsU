@@ -203,8 +203,6 @@ _pushNotes() {
 
     }
 
-
-
 clockingOut = () => {
   var timestamp = Date.now()/1000;
 
@@ -226,7 +224,6 @@ function clockOutAPI(callback) {
     console.log('request failed', error);
   })
 }
-
     Alert.alert(
       "You are clocking out",
       "Are you sure?",

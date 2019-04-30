@@ -1,64 +1,26 @@
 import React from "react";
 import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text, Card, CardItem } from "native-base";
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import LoginScreenRouter from '../LoginScreen/index';
 
 const styles = StyleSheet.create({
     userTitle: {
     fontWeight: 'bold',
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: '5%',
-    left: '5%',
-    textAlign: 'center'
+    marginTop: 10,
+    marginLeft: 10,
   },
     userValue: {
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: '10%',
-    left: '5%',
-    textAlign: 'center'
+    marginTop: 20,
+    marginLeft: 10,
   },
-  employeeTitle: {
-    fontWeight: 'bold',
+  exportButtonLogOut: {
     textAlignVertical: 'center',
-    position: 'absolute',
-    top: '20%',
-    left: '5%',
-    textAlign: 'center'
-  },
-  employeeValue: {
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: '25%',
-    left: '5%',
-    textAlign: 'center'
-  },
-    locationTitle: {
-    fontWeight: 'bold',
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: '35%',
-    left: '5%',
-    textAlign: 'center'
-  },
-  locationValue: {
-    textAlignVertical: 'center',
-    position: 'absolute',
-    top: '40%',
-    left: '5%',
-    textAlign: 'center'
-  },
-  exportButtonNonAdmin: {
-    opacity: 0
-  },
-  exportButtonAdmin: {
-    textAlignVertical: 'center',
-    position: 'absolute',
-    bottom: '10%',
-    left: '5%',
+    marginTop: 400,
+    marginLeft: 15,
     textAlign: 'center',
-    backgroundColor: '#41f46e',
+    backgroundColor: '#fa8072',
     padding: 25,
+    width: 115,
     borderRadius: 10
   }
 })
@@ -66,26 +28,64 @@ const styles = StyleSheet.create({
 export default class MoreScreen extends React.Component {
 
   static navigationOptions = {
-    title: 'More'
+    title: 'More',
   }
+
+  static navigationOptions = {
+    header: null
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {logoutPressed: false};
+  }
+
+  loggingOut = () => {
+      Alert.alert(
+        "Logging Out",
+        "Are you sure?",
+        [
+          { text: "Yes", onPress: () => this.returnToLogin() },
+          { text: "Cancel",
+            onPress: () => console.log("Cancel pressed"),
+            style: "cancel"
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+
+    returnToLogin = () => {
+      this.setState({logoutPressed: true})
+    }
+
     render() {
-        const admin = 1
+      if(!this.state.logoutPressed) {
+        const { navigate } = this.props.navigation;
         return (
           <Container>
-            <Text style = {styles.userTitle}>User</Text>
-            <Text style = {styles.userValue}>Haleigh Rogers</Text>
-            <Text style = {styles.employeeTitle}>Employee Classification</Text>
-            <Text style = {styles.employeeValue}>On-site Manager</Text>
-            <Text style = {styles.locationTitle}>Site Location</Text>
-            <Text style = {styles.locationValue}>Carrollton Oaks</Text>
-            <TouchableOpacity
-              onPress={()=>this._onPress()}
-              style={admin ? [styles.exportButtonAdmin] : [styles.exportButtonNonAdmin]}
-              disabled={admin ? false : true}
-            >
-              <Text>Export Timesheet</Text>
-            </TouchableOpacity>
+            <Header>
+              <Left/>
+                <Body>
+                  <Title>More</Title>
+                </Body>
+              <Right/>
+            </Header>
+            <Content>
+              <Text style = {styles.userTitle}>User</Text>
+              <Text style = {styles.userValue}>notadmin1</Text>
+              <TouchableOpacity
+                onPress={()=>this.loggingOut()}
+                style={[styles.exportButtonLogOut]}>
+                  <Text>Log Out</Text>
+              </TouchableOpacity>
+            </Content>
           </Container>
         );
+      } else {
+        return (
+          <LoginScreenRouter />
+        );
       }
+  }
 }
