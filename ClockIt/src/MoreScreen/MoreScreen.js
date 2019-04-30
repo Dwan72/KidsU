@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text, Card, CardItem } from "native-base";
 import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import LoginScreenRouter from '../LoginScreen/index';
+import App from '../../App';
 
 const styles = StyleSheet.create({
     userTitle: {
@@ -84,7 +84,7 @@ export default class MoreScreen extends React.Component {
         );
       } else {
         return (
-          <LoginScreenRouter />
+          <App />
         );
       }
   }

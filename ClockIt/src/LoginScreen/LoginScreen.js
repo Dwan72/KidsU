@@ -63,7 +63,7 @@ export default class Login extends React.Component {
     // Make a call to your backend database and try to find that user
     // If there is a user in the database with this email and password then you will log them in and then redirect them somewhere
     const { password, email } = this.state;
-    console.log('Email:', email, 'Password:', password);
+
     this.props.navigation.navigate('Timeclock');
   }
 
