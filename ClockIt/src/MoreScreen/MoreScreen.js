@@ -73,7 +73,7 @@ export default class MoreScreen extends React.Component {
             </Header>
             <Content>
               <Text style = {styles.userTitle}>User</Text>
-              <Text style = {styles.userValue}>Haleigh Rogers</Text>
+              <Text style = {styles.userValue}>notadmin1</Text>
               <TouchableOpacity
                 onPress={()=>this.loggingOut()}
                 style={[styles.exportButtonLogOut]}>
