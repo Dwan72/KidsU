@@ -71,16 +71,14 @@ export default class Login extends React.Component {
     }
 
     if(username != '' && password != '' && password.length >= 8) {
-      this.props.navigation.navigate('Timeclock');
-
       fetch('http://' + username + ':' + password + '@ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
         headers: {
           'Content-Type': 'application/json'
         },
       }).then((json) => {
         console.log('request successfull ', json);
+        this.props.navigation.navigate('Timeclock');
       }).catch((error) => {
-        console.log('request failed ', error)
         alert("The request to login failed. Try again later")
       })
     }
