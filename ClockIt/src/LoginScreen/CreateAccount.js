@@ -67,6 +67,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+  },
+  text2: {
+    color: 'rgb(209, 24, 0)',
+    fontSize: 9,
+    alignItems: 'center',
+    paddingLeft:60,
+    paddingRight:60,
   }
 });
 
@@ -98,6 +105,9 @@ export default class CreateAccount extends React.Component {
       if (user == '' || password  == '' || firstname  == ''  || lastname  == ''  || email  == '' ){
           alert('Please fill out ALL the values');
         }
+        else if (password.length < 8){
+          this.setState({Error:'Password must be at least 8 characters long'})
+      }
       else{
         fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/register', {
           method: 'POST',
@@ -183,7 +193,7 @@ render() {
            returnKeyType="go"
            placeholder="Password"
            placeholderTextColor="#050506"
-           clearButtonMode="always"/>
+           clearButtonMode="always"/> 
          <TextInput
            style={styles.input}
            autoCapitalize="none"
@@ -194,6 +204,8 @@ render() {
            placeholder="Email"
            placeholderTextColor="#050506"
            clearButtonMode="always"/>
+          
+<Text style={styles.text2}> {this.state.Error} </Text>
          <TouchableOpacity
            style={styles.submitButtonContainer}
            onPress={this.onSubmitButtonPress}>
