@@ -58,7 +58,7 @@ GetItem(item) {
     Alert.alert(item);
 }
 
-
+trytest(callback) {
 let headersGet = new Headers();
 
 headersGet.append('Content-Type', 'application/json');
@@ -73,7 +73,6 @@ headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" +
 
 fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
      headers: headersGet
-  
 
 }).then(function(json) {
     console.log('request succeeded with json response111', JSON.parse(json._bodyText)[0].xcoord);

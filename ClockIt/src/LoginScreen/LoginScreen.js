@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image,Button, Alert } from 'react-native';
 import KIDS from './KIDSU.png';
+import base64 from 'react-native-base64';
 
 const styles = StyleSheet.create({
   container: {
@@ -70,16 +71,28 @@ export default class Login extends React.Component {
       this.setState({password: password})
     }
 
+
+
     if(username != '' && password != '' && password.length >= 8) {
-      fetch('http://' + username + ':' + password + '@ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
-        headers: {
-          'Content-Type': 'application/json'
-        },
+
+          // encoding credentials
+let headersGet = new Headers();
+
+headersGet.append('Content-Type', 'application/json');
+headersGet.append('Accept', 'application/json');
+headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
+
+      fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
+        headers: headersGet
       }).then((json) => {
-        console.log('request successfull ', json);
+        if (json.status == 200) {
         this.props.navigation.navigate('Timeclock');
+      }
+        else {
+        alert("The request to login failed. Try again later");
+        }
       }).catch((error) => {
-        alert("The request to login failed. Try again later")
+        alert("The request to login failed. Try again later");
       })
     }
   }
