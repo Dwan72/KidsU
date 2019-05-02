@@ -60,6 +60,7 @@ export default class Login extends React.Component {
 
   onButtonPress = () => {
     const { password, username } = this.state;
+    
     if (username == '') {
         alert('Please fill in username');
     } else if (password  == '' ) {
@@ -95,6 +96,7 @@ headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + pas
         alert("The request to login failed. Try again later");
       })
     }
+
   }
 
   render() {
