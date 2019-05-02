@@ -5,18 +5,25 @@ import { Ionicons } from '@expo/vector-icons';
 import { Segment, Form, Textarea } from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { TouchableOpacity, View, StyleSheet , TextInput } from 'react-native'
+import moment from 'moment'
 
 export default class AddTimesheet extends Component {
     static navigationOptions = {
         header: null
     }
-
-    state = {
-        showStartDatePicker: false,
-        showEndDatePicker: false,
-        startTime: '',
-        endTime: '',
-    };
+    constructor() {
+        super()
+        this.state = {
+            showStartDatePicker: false,
+            showEndDatePicker: false,
+            showTotalTime: false,
+            startTime: '',
+            rawStartTime: '',
+            endTime: '',
+            rawEndTime: '',
+            totalTime: ''
+        }
+    }
 
     handleStartDatePress = () => { this.setState({ showStartDatePicker: true }); }
     handleStartDatePickerHide = () => { this.setState({ showStartDatePicker: false}); }
@@ -24,17 +31,33 @@ export default class AddTimesheet extends Component {
     handleEndDatePress = () => { this.setState({ showEndDatePicker: true }); }
     handleEndDatePickerHide = () => { this.setState({ showEndDatePicker: false}); }
 
-    handleStartDatePicked = (startTime) => {
+
+    handleStartDatePicked = (time) => {
         this.setState({
-            startTime,
+            showStartDatePicker: false,
+            rawStartTime: time,
+            startTime: moment(time).format('MMMM, Do YYYY HH:mm')
         });
-        this.handleStartDatePickerHide();
     }
-    handleEndDatePicked = (endTime) => {
+    handleEndDatePicked = (time) => {
         this.setState({
-            endTime,
+            showEndDatePicker: false,
+            rawEndTime: time,
+            endTime: moment(time).format('MMMM, Do YYYY HH:mm')
         });
-        this.handleEndDatePickerHide();
+        this.calculateTotalTime();
+        this.setState({
+            showTotalTime: true
+        })
+    }
+    calculateTotalTime = () => {
+        var start = moment(this.state.rawStartTime, "HH:mm");
+        var end = moment(this.state.rawEndTime, "HH:mm");
+        var duration = moment.duration(end.diff(start));
+
+        this.setState({
+            totalTime: moment.utc(+duration).format('HH:mm')
+        })
     }
 
 
@@ -45,7 +68,7 @@ export default class AddTimesheet extends Component {
         return(
             <Container>
                 <Header>
-                    <Left>
+                    <Left style={{paddingLeft: 10}}>
                         <Button
                             onPress = {() => this.props.navigation.navigate('Timesheet')}
                             transparent>
@@ -58,22 +81,28 @@ export default class AddTimesheet extends Component {
                     <Right />
                 </Header>
                 <Content>
-                    <List>
-                        <ListItem>
-                            <View style = {styles.label}>
+                    <List style = {styles.list}>
+
+                        <ListItem style={styles.item}>
+
+                            <View style={styles.label}>
                                 <TouchableOpacity
-                                    onPress={this.handleStartDatePress}>
+                                    onPress={this.handleStartDatePress}
+                                    >
                                     <Text>Start Time</Text>
                                 </TouchableOpacity>
                             </View>
+                            
                             <View style = {styles.time}>
                                 <TextInput
-                                    placeholder="Time"
+                                    placeholder="00:00"
                                     spellCheck={false}
-                                    value={this.state.startTime.toString()}
+                                    value={this.state.startTime}
                                     editable={!this.state.showStartDatePicker}
-                                    onFocus={this.handleStartDatePress}/>
+                                    onFocus={this.handleStartDatePress}
+                                />
                             </View>
+
                             <DateTimePicker
                                 isVisible={this.state.showStartDatePicker}
                                 onConfirm={this.handleStartDatePicked}
@@ -81,56 +110,66 @@ export default class AddTimesheet extends Component {
                                 mode={'datetime'}
                                 is24Hour={false}
                             />
+                      
+                        </ListItem>
+
+                        <ListItem style = {styles.item}>
+                            <View style = {styles.item}>
+                                <View style = {styles.label}>
+                                    <TouchableOpacity
+                                        onPress={this.handleEndDatePress}>
+                                        <Text>End Time</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            
+                                <View style = {styles.time}>
+                                    <TextInput
+                                        placeholder="00:00"
+                                        spellCheck={false}
+                                        value={this.state.endTime}
+                                        editable={!this.state.showEndDatePicker}
+                                        onFocus={this.handleEndDatePress}
+                                    />
+                                </View>
+                                <DateTimePicker
+                                        isVisible={this.state.showEndDatePicker}
+                                        onConfirm={this.handleEndDatePicked}
+                                        onCancel={this.handleEndDatePickerHide}
+                                        mode={'datetime'}
+                                        is24Hour={false}
+                                />
+                            </View>
+                            
 
                         </ListItem>
 
-                        <ListItem>
-                        <View style = {styles.label}>
-                                <TouchableOpacity
-                                    onPress={this.handleEndDatePress}
-                                    >
-                                    <Text>End Time</Text>
-                                </TouchableOpacity>
+                        {/* <ListItem style = {styles.item}>
+
+                            <View style = {styles.label}>
+                                <Text>Total Time</Text>
                             </View>
 
                             <View style = {styles.time}>
-                                <TextInput
-                                    placeholder="Time"
+                                { this.state.showTotalTime && <TextInput
+                                    placeholder="Total"
                                     spellCheck={false}
-                                    value={this.state.endTime.toString()}
-                                    editable={!this.state.showEndDatePicker}
-                                    onFocus={this.handleEndDatePress}
-                                />
+                                    value = {this.state.totalTime}
+                                    editable = {false}
+                                />}
                             </View>
 
-                            <DateTimePicker
-                                isVisible={this.state.showEndDatePicker}
-                                onConfirm={this.handleEndDatePicked}
-                                onCancel={this.handleEndDatePickerHide}
-                                mode={'datetime'}
-                                is24Hour={false}
-                            />
-
-                        </ListItem>
-
-                        <ListItem>
-                            <Left>
-                                <Text>Total</Text>
-                            </Left>
-                            <Body/>
-                            <Right/>
-                        </ListItem>
+                        </ListItem> */}
                     </List>
 
-                    <Text>Notes</Text>
-                    <Form>
-                        <Textarea rowSpan={5} bordered placeholder="Enter Notes" />
-                    </Form>
+                    <View style = {styles.textBox}>
+                        <Text style = {styles.textBoxLabel}>Notes</Text>
+                        <Form>
+                            <Textarea rowSpan={5} bordered placeholder="Enter Notes" />
+                        </Form>
+                    </View>
 
                 </Content>
-
-
-                <Footer noShadow>
+                <Footer>
                     <FooterTab>
                         <Button full primary
                             onPress = {() => this.props.navigation.navigate('Timesheet')}>
@@ -145,10 +184,27 @@ export default class AddTimesheet extends Component {
 }
 
 const styles = StyleSheet.create({
+    list:{
+        paddingTop: 20
+    },
+    item:{
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-between'
+    },
     label:{
-        alignItems: 'flex-start'
     },
     time:{
-        alignItems: 'flex-end'
+    },
+    textBox: {
+        paddingTop: 35,
+        paddingLeft: 15,
+        paddingRight: 15
+    },
+    textBoxLabel:{
+        fontFamily: 'San Francisco',
+        fontWeight: 'bold',
+        fontSize: 14,
     }
+
 })

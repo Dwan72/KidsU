@@ -66,7 +66,6 @@ export default class ListSeparatorExample extends React.Component{
 
       </Content>
 
-      <Footer/>
     </Container>
 
     );
