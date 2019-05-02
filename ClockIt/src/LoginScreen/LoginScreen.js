@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image,Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image,Button, Alert } from 'react-native';
 import KIDS from './KIDSU.png';
+import base64 from 'react-native-base64';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,19 +53,48 @@ export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      username: '',
       password: ''
     };
   }
 
   onButtonPress = () => {
-    // Make sure that the email is a valid email
-    // Make sure that the password is at least 8 characters long
-    // Make a call to your backend database and try to find that user
-    // If there is a user in the database with this email and password then you will log them in and then redirect them somewhere
-    const { password, email } = this.state;
-    console.log('Email:', email, 'Password:', password);
-    this.props.navigation.navigate('Timeclock');
+    const { password, username } = this.state;
+    if (username == '') {
+        alert('Please fill in username');
+    } else if (password  == '' ) {
+        alert('Please fill in password');
+    } else if (password.length < 8) {
+       alert('Password must be at least 8 characters long');
+    } else {
+      this.setState({username: username})
+      this.setState({password: password})
+    }
+
+
+
+    if(username != '' && password != '' && password.length >= 8) {
+
+          // encoding credentials
+let headersGet = new Headers();
+
+headersGet.append('Content-Type', 'application/json');
+headersGet.append('Accept', 'application/json');
+headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
+
+      fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
+        headers: headersGet
+      }).then((json) => {
+        if (json.status == 200) {
+        this.props.navigation.navigate('Timeclock');
+      }
+        else {
+        alert("The request to login failed. Try again later");
+        }
+      }).catch((error) => {
+        alert("The request to login failed. Try again later");
+      })
+    }
   }
 
   render() {
@@ -79,11 +109,11 @@ export default class Login extends React.Component {
         <TextInput
           style={styles.input}
           autoCapitalize="none"
-          onChangeText={email => this.setState({ email })}
+          onChangeText={username => this.setState({ username })}
           autoCorrect={false}
           keyboardType="email-address"
           returnKeyType="next"
-          placeholder="Email"
+          placeholder="Username"
           placeholderTextColor="#050506"/>
 
         <TextInput
