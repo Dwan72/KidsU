@@ -12,7 +12,7 @@ export default class TimeClockScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      spinnerOpacity: 1,
+      spinner: 0,
       count: 0,
       toggle: true,
       arrayHolder:
@@ -21,7 +21,7 @@ export default class TimeClockScreen extends React.Component {
       textInput_Holder: ''
     }
     //this.state = {Notes: this.props.navigation.state.params.Notes,};
-   this.array = [{title: 'Notes will appear here:'}]
+
 
   }
 
@@ -37,28 +37,14 @@ static navigationOptions = {
     header: null
 }
 
-joinData = () => {
-  this.array.push({title : this.state.textInput_Holder});
-  this.setState({ arrayHolder : [...this.array] })
-  console.log("Cancel Pressed")
-}
 
-test(callback) {
-  console.log('1111');
-  callback();
-}
 
 toggle = () => {this.setState({on: !this.state.on})}
 
-componentDidMount() {
-    this.setState({ arrayHolder: [...this.array] })
-}
-
-GetItem(item) {
-    Alert.alert(item);
-}
 
 trytest(callback) {
+
+this.setState({spinner: 1});
 let headersGet = new Headers();
 
 headersGet.append('Content-Type', 'application/json');
@@ -124,7 +110,8 @@ function success(pos) {
     console.log('request succeeded with json response222', json);   
     callback();
   }).catch(function(error) {
-    console.log('request failed', error);
+    console.log('request failed - Clock in API', error);
+    this.setState({spinner: 0});
   })
   }
   else 
@@ -145,7 +132,7 @@ return new Promise((resolve, reject) => {
   })
 
 // end of validating location
- }).catch(function(error) { console.log('request failed', error) })
+ }).catch(function(error) { console.log('request failed - Validating Location', error) })
 }
 
 trysuccess() {
@@ -157,34 +144,75 @@ validateLocation() {
 }
 
 clockingIn() {
-  const newState = !this.state.toggle;
-  if(newState) {
-    <Spinner color='blue' />
-  }
-  this.setState({toggle:newState})
+      const newState = !this.state.toggle;
+      this.setState({spinner: 0});
+      this.setState({toggle:newState})
 }
 
 _pushNotes() {
-    var item = this.state.textInput_Holder;
+var timestamp = Date.now()/1000;
+  let headersGet = new Headers();
+
+headersGet.append('Content-Type', 'application/json');
+headersGet.append('Accept', 'application/json');
+headersGet.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+
+let headersPost = new Headers();
+headersPost.append('Content-Type', 'application/json');
+headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+    var notesHolder = this.state.textInput_Holder;
     const newState = !this.state.toggle;
     this.setState({toggle:newState})
-    this.array.push({title : item});
-    this.setState({ arrayHolder: [...this.array] })
-
-    this.props.navigation.push({
-      screen: 'TimesheetScreen',
-      item: 'item',
-      passProps: {
-        data: item
-      },
-    });
-
     this.setState({textInput_Holder:""}); // reset notes box
     this.setState({data:""});
+
+fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/notadmin1', {
+     headers: headersGet
+}).then(function(json) {
+
+        let notesTimestampIn = 0;
+        let notesTimestampOut = 0;
+
+        // Find ClockOutTime that matches the current timestamp
+    for (i = JSON.parse(json._bodyText).length-1; i > 0; i--)
+    {
+      if (timestamp+5 > JSON.parse(json._bodyText)[i].clock_out &&
+           timestamp-5 < JSON.parse(json._bodyText)[i].clock_out) {
+        notesTimestampIn = JSON.parse(json._bodyText)[i].clock_in;
+        notesTimestampOut = JSON.parse(json._bodyText)[i].clock_out;
+        break;
+      }
+    }
+
+      // Pushing notes
+ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
+  method: 'POST',
+  headers: headersPost,
+  body: JSON.stringify({
+    notes: notesHolder,
+    clockInTime: notesTimestampIn,
+    clockOutTime: notesTimestampOut
+  })
+}).then(function(json) {
+
+    this.setState({spinner: 0});
+    console.log('request succeeded with json response111', (json._bodyText));
+
+  }).catch(function(error) {
+    this.setState({spinner: 0});
+    console.log('request failed - Notes API', error);
+  })
+  }).catch(function(error) {
+    this.setState({spinner: 0});
+    console.log('request failed - Timetable API', error);
+  })
+
 }
 
 clockingOut = () => {
-  var timestamp = Date.now()/1000;
+
 
 let headersPost = new Headers();
 headersPost.append('Content-Type', 'application/json');
@@ -192,6 +220,7 @@ headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" +
 
 
 function clockOutAPI(callback) {
+    var timestamp = Date.now()/1000;
  fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-out', {
   method: 'POST',
   headers: headersPost,
@@ -200,6 +229,7 @@ function clockOutAPI(callback) {
     clockOutTime: timestamp,
   })
 }).then(function(json) {
+
     console.log('request succeeded with json response333333', json);   
     callback();
   }).catch(function(error) {
@@ -229,7 +259,7 @@ function clockOutAPI(callback) {
     const changeInvisible = toggle?0:1;
     const changeOnClock = toggle?"Off the clock":"On the clock";
     const changetimerBox = toggle?"woopdewoop":"timerBox";
-    const spinnerOpacity = this.state.spinnerOpacity;
+    const spinner = this.state.spinner;
 
     return (
           <Container>
@@ -253,6 +283,9 @@ function clockOutAPI(callback) {
                     onChangeText={data => this.setState({ textInput_Holder: data })}
                     blurOnSubmit = {true} rowSpan={8} bordered placeholder="Enter your notes here"
                     value={this.state.textInput_Holder} />
+
+            <Spinner color='blue' animating={spinner} />
+
             <TouchableOpacity onPress={()=>this.trysuccess()} disabled={changeInvisible}
                 activeOpacity={0.5} style={[styles.buttonClockInOut,
                   {backgroundColor:changeBGColor, opacity:changeVisible}]}>
@@ -263,15 +296,6 @@ function clockOutAPI(callback) {
                   {backgroundColor:changeBGColor, opacity:changeInvisible}]}>
                 <Text style={styles.text}> Clock Out</Text>
             </TouchableOpacity>
-            <List>
-              <FlatList
-                data={this.state.arrayHolder}
-                extraData={this.state.arrayHolder}
-                keyExtractor={(index) => index.toString()}
-                ItemSeparatorComponent={this.FlatListItemSeparator}
-                renderItem={({ item }) => <Text style={styles.item}>
-                {item.title} </Text>}/>
-            </List>
       </Content>
     </Container>
     );
