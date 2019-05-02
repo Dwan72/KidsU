@@ -4,7 +4,7 @@ import Component from 'react';
 import TimerMachine from 'react-timer-machine'
 import { TouchableHighlight,TextInput, FlatList, AppRegistry, TouchableOpacity, StyleSheet, Alert, View, Text } from 'react-native';
 import { Spinner, Container, Header, Content, Textarea, Form, List, ListItem, Separator, Right, Left, Footer, FooterTab, Button, Icon, Body, Title } from 'native-base';
-
+import base64 from 'react-native-base64';
 
 export default class TimeClockScreen extends React.Component {
 
@@ -81,15 +81,27 @@ toggle = () => {
 
   trytest(callback) {
 
-fetch('http://notadmin1:notadmin1@ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
-  headers: {
-    'Content-Type': 'application/json'
-  },
+
+let headersGet = new Headers();
+
+headersGet.append('Content-Type', 'application/json');
+headersGet.append('Accept', 'application/json');
+headersGet.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+
+let headersPost = new Headers();
+headersPost.append('Content-Type', 'application/json');
+headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+
+fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
+     headers: headersGet
+  
 }).then(function(json) {
-    console.log('request succeeded with json response111', JSON.parse(json._bodyText)[0].xcoord)
+    console.log('request succeeded with json response111', JSON.parse(json._bodyText)[0].xcoord);
     var xlocation = JSON.parse(json._bodyText)[0].xcoord;
     var ylocation = JSON.parse(json._bodyText)[0].ycoord;
-
+// JSON.parse(json.bodyText)[0].xcoord
 // validate location
   var geoOptions = {
     enableHighAccuracy: true,
@@ -123,12 +135,11 @@ function error(err) {
   {
     var timestamp = Date.now()/1000;
 
+
+
  fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
   method: 'POST',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
+  headers: headersPost,
   body: JSON.stringify({
     user: "notadmin1",
     clockInTime: timestamp,
@@ -206,16 +217,18 @@ _pushNotes() {
 clockingOut = () => {
   var timestamp = Date.now()/1000;
 
+let headersPost = new Headers();
+headersPost.append('Content-Type', 'application/json');
+headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+
 function clockOutAPI(callback) {
- fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-out', {
   method: 'POST',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
+  headers: headersPost,
   body: JSON.stringify({
     user: "notadmin1",
-    clockInTime: timestamp,
+    clockOutTime: timestamp,
   })
 }).then(function(json) {
     console.log('request succeeded with json response333333', json);   
