@@ -65,8 +65,6 @@ export default class Login extends React.Component {
         alert('Please fill in username');
     } else if (password  == '' ) {
         alert('Please fill in password');
-    } else if (password.length < 8) {
-       alert('Password must be at least 8 characters long');
     } else {
       this.setState({username: username})
       this.setState({password: password})
