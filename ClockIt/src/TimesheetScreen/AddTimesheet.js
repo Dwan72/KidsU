@@ -6,6 +6,8 @@ import { Segment, Form, Textarea } from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { TouchableOpacity, View, StyleSheet , TextInput } from 'react-native'
 import moment from 'moment'
+import base64 from 'react-native-base64';
+
 
 export default class AddTimesheet extends Component {
     static navigationOptions = {
@@ -60,6 +62,84 @@ export default class AddTimesheet extends Component {
         })
     }
 
+
+clockInAPI(timestamp) {
+
+    // ex: March 01 2019 --> UNIX Time 
+    // = 3982183918242/1000; 
+
+
+    let headersPost = new Headers();
+headersPost.append('Content-Type', 'application/json');
+headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+// let timestamp = the time user puts in as 'from' 
+
+     fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+  method: 'POST',
+  headers: headersPost,
+  body: JSON.stringify({
+    user: "notadmin1",
+    clockInTime: timestamp,
+  })
+}).then(function(json) {
+    console.log('request succeeded with json response', json);   
+    callback();
+  }).catch(function(error) {
+    console.log('request failed - Clock in API', error);
+    this.setState({spinner: 0});
+  })
+}
+
+clockOutAPI() {
+
+    let timestamp = this.state.startTime;
+
+    let headersPost = new Headers();
+headersPost.append('Content-Type', 'application/json');
+headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+// Let timestamp = user clockout time 
+
+fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-out', {
+  method: 'POST',
+  headers: headersPost,
+  body: JSON.stringify({
+    user: "notadmin1",
+    clockOutTime: timestamp,
+  })
+}).then(function(json) {
+
+    console.log('request succeeded with json response', json);   
+    callback();
+  }).catch(function(error) {
+    console.log('request failed', error);
+  })
+
+}
+
+notesAPI(notesTimestampIn, notesTimestampOut, notesHolder) {
+
+fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
+  method: 'POST',
+  headers: headersPost,
+  body: JSON.stringify({
+    notes: notesHolder,
+    clockInTime: notesTimestampIn,
+    clockOutTime: notesTimestampOut
+  })
+}).then(function(json) {
+
+    this.setState({spinner: 0});
+    console.log('request succeeded with json response111', (json._bodyText));
+
+  }).catch(function(error) {
+    this.setState({spinner: 0});
+    console.log('request failed - Notes API', error);
+  })
+
+
+}
 
     render() {
 
@@ -172,7 +252,10 @@ export default class AddTimesheet extends Component {
                 <Footer>
                     <FooterTab>
                         <Button full primary
-                            onPress = {() => this.props.navigation.navigate('Timesheet')}>
+                            onPress = {() => // clockinAPI --> clockout API --> notesAPI --> 
+                                // create alert success
+
+                                //, this.props.navigation.navigate('Timesheet')}>
                             <Text>SAVE TIMESHEET</Text>
                         </Button>
                     </FooterTab>

@@ -52,7 +52,10 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
     var clockout = JSON.parse(json._bodyText)[i].clock_out;
     var notes = JSON.parse(json._bodyText)[i].notes; 
 
+    // clockin (UNIX time) --> convert to calendar time 
+    // clockout (UNIX time) --> convert to calendar time 
     //temptimes.push = clockin, clockout, notes; 
+
 
 }
 
