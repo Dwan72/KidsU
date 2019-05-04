@@ -4,60 +4,72 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import base64 from 'react-native-base64';
+import moment from 'moment'
 
-
-const times = [
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-  {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-]
-
+// const times = [
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
+// ]
+const times2 = []
 
 export default class ListSeparatorExample extends React.Component{
 
   static navigationOptions = {
     header: null
   }
+  constructor() {
+    super()
+    this.state = {
+        times: []
+    }
+}
 
-
-  timetableAPI() {
-
+timetableAPI() {
 // Set the headers 
 let headersGet = new Headers();
-
 headersGet.append('Content-Type', 'application/json');
 headersGet.append('Accept', 'application/json');
 headersGet.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
 
+handleTimePicked = (times2) => {
+  this.setState({
+    times: times2
+  })
+}
+
 // Begin API Call 
 fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/notadmin1', {
      headers: headersGet
-
 }).then(function(json) {
     //console.log('request works - json is:', json);
+  
+    
+      for (let i = (JSON.parse(json._bodyText).length-20); i < JSON.parse(json._bodyText).length; i++){
+        var clockin = JSON.parse(json._bodyText)[i].clock_in; 
+        var clockout = JSON.parse(json._bodyText)[i].clock_out;
+        var notes = JSON.parse(json._bodyText)[i].notes; 
+        var clockinCalendar = moment.unix(clockin).format("MMMM, Do YYYY HH:mm");
+        var clockoutCalendar = moment.unix(clockout).format("MMMM, Do YYYY HH:mm");
 
-    var temptimes = []; 
+        times2.push({time1:clockinCalendar, time2:clockoutCalendar, notesValue:notes})
 
-    for (i = 0; i < JSON.parse(json._bodyText).length; i++) {
 
-    console.log('the 1st timetable slot:', JSON.parse(json._bodyText)[i]);
-    var clockin = JSON.parse(json._bodyText)[i].clock_in; 
-    var clockout = JSON.parse(json._bodyText)[i].clock_out;
-    var notes = JSON.parse(json._bodyText)[i].notes; 
-
+      }
+    // }
+    
     // clockin (UNIX time) --> convert to calendar time 
     // clockout (UNIX time) --> convert to calendar time 
     //temptimes.push = clockin, clockout, notes; 
 
-
-}
+    handleTimePicked(times2)
 
   // update this.state.times
 
@@ -94,7 +106,7 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
       <Content>
 
         {
-          times.map((time, index) => {
+          this.state.times.map((time, index, arrObj) => {
             return (
               <View key={time}>
                 <TouchableOpacity

@@ -61,39 +61,40 @@ export default class Login extends React.Component {
   onButtonPress = () => {
     const { password, username } = this.state;
     
-    if (username == '') {
-        alert('Please fill in username');
-    } else if (password  == '' ) {
-        alert('Please fill in password');
-    } else {
-      this.setState({username: username})
-      this.setState({password: password})
-    }
+//     if (username == '') {
+//         alert('Please fill in username');
+//     } else if (password  == '' ) {
+//         alert('Please fill in password');
+//     } else {
+//       this.setState({username: username})
+//       this.setState({password: password})
+//     }
 
 
 
-    if(username != '' && password != '' && password.length >= 8) {
+//     if(username != '' && password != '' && password.length >= 8) {
 
-          // encoding credentials
-let headersGet = new Headers();
+//           // encoding credentials
+// let headersGet = new Headers();
 
-headersGet.append('Content-Type', 'application/json');
-headersGet.append('Accept', 'application/json');
-headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
+// headersGet.append('Content-Type', 'application/json');
+// headersGet.append('Accept', 'application/json');
+// headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
-      fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
-        headers: headersGet
-      }).then((json) => {
-        if (json.status == 200) {
-        this.props.navigation.navigate('Timeclock');
-      }
-        else {
-        alert("The request to login failed. Try again later");
-        }
-      }).catch((error) => {
-        alert("The request to login failed. Try again later");
-      })
-    }
+//       fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
+//         headers: headersGet
+//       }).then((json) => {
+//         if (json.status == 200) {
+//         this.props.navigation.navigate('Timeclock');
+//       }
+//         else {
+//         alert("The request to login failed. Try again later");
+//         }
+//       }).catch((error) => {
+//         alert("The request to login failed. Try again later");
+//       })
+//     }
+    this.props.navigation.navigate('Timeclock');
 
   }
 

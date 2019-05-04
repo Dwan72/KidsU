@@ -62,7 +62,7 @@ export default class AddTimesheet extends Component {
         })
     }
 
-
+/*
 clockInAPI(timestamp) {
 
     // ex: March 01 2019 --> UNIX Time 
@@ -140,7 +140,7 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
 
 
 }
-
+*/
     render() {
 
         const { navigate } = this.props.navigation;
@@ -252,10 +252,11 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
                 <Footer>
                     <FooterTab>
                         <Button full primary
-                            onPress = {() => // clockinAPI --> clockout API --> notesAPI --> 
-                                // create alert success
+                            onPress = {() => this.props.navigation.navigate('Timesheet')}>
+                                 {/* clockinAPI --> clockout API --> notesAPI --> 
+                                 create alert success
 
-                                //, this.props.navigation.navigate('Timesheet')}>
+                                , this.props.navigation.navigate('Timesheet')}> */}
                             <Text>SAVE TIMESHEET</Text>
                         </Button>
                     </FooterTab>
