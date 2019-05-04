@@ -42,7 +42,7 @@ static navigationOptions = {
 toggle = () => {this.setState({on: !this.state.on})}
 
 
-trytest(callback) {
+validateLocation(callback) {
 
 this.setState({spinner: 1});
 let headersGet = new Headers();
@@ -135,15 +135,12 @@ return new Promise((resolve, reject) => {
  }).catch(function(error) { console.log('request failed - Validating Location', error) })
 }
 
-trysuccess() {
-this.trytest(() => {this.clockingIn();})
-}
-
-validateLocation() {
-
-}
-
 clockingIn() {
+this.validateLocation(() => {this.changeSpinner();})
+}
+
+
+changeSpinner() {
       const newState = !this.state.toggle;
       this.setState({spinner: 0});
       this.setState({toggle:newState})
@@ -261,6 +258,7 @@ function clockOutAPI(callback) {
     const changetimerBox = toggle?"woopdewoop":"timerBox";
     const spinner = this.state.spinner;
 
+
     return (
           <Container>
             <Header>
@@ -286,7 +284,7 @@ function clockOutAPI(callback) {
 
             <Spinner color='blue' animating={spinner} />
 
-            <TouchableOpacity onPress={()=>this.trysuccess()} disabled={changeInvisible}
+            <TouchableOpacity onPress={()=>this.clockingIn()} disabled={changeInvisible}
                 activeOpacity={0.5} style={[styles.buttonClockInOut,
                   {backgroundColor:changeBGColor, opacity:changeVisible}]}>
                 <Text style={styles.text}> Clock In</Text>
