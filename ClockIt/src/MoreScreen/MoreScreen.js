@@ -37,7 +37,11 @@ export default class MoreScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {logoutPressed: false};
+    this.state = {
+      logoutPressed: false,
+      username: this.props.navigation.dangerouslyGetParent().getParam('username', 'error'),
+      password: this.props.navigation.dangerouslyGetParent().getParam('password', 'error'),
+    };
   }
 
   loggingOut = () => {
@@ -56,7 +60,9 @@ export default class MoreScreen extends React.Component {
     }
 
     returnToLogin = () => {
-      this.setState({logoutPressed: true})
+      this.setState({logoutPressed: true});
+      this.setState({username: 'NULL'});
+      this.setState({password: 'NULL'});
     }
 
     render() {
@@ -73,7 +79,7 @@ export default class MoreScreen extends React.Component {
             </Header>
             <Content>
               <Text style = {styles.userTitle}>User</Text>
-              <Text style = {styles.userValue}>notadmin1</Text>
+              <Text style = {styles.userValue}>{this.state.username}</Text>
               <TouchableOpacity
                 onPress={()=>this.loggingOut()}
                 style={[styles.exportButtonLogOut]}>
