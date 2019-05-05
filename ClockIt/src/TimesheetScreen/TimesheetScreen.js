@@ -49,29 +49,24 @@ handleTimePicked = (times2) => {
 fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/notadmin1', {
      headers: headersGet
 }).then(function(json) {
-    //console.log('request works - json is:', json);
-  
-    
+
+      times2.length = 0;
       for (let i = (JSON.parse(json._bodyText).length-20); i < JSON.parse(json._bodyText).length; i++){
         var clockin = JSON.parse(json._bodyText)[i].clock_in; 
         var clockout = JSON.parse(json._bodyText)[i].clock_out;
         var notes = JSON.parse(json._bodyText)[i].notes; 
         var clockinCalendar = moment.unix(clockin).format("MMMM, Do YYYY HH:mm");
         var clockoutCalendar = moment.unix(clockout).format("MMMM, Do YYYY HH:mm");
+        var clockInTime = moment.unix(clockin).format("HH:mm");
+        var clockOutTime = moment.unix(clockout).format("HH:mm");
+        var clockDate = moment.unix(clockin).format("MMMM, Do")
 
-        times2.push({time1:clockinCalendar, time2:clockoutCalendar, notesValue:notes})
-
-
+        times2.push({time1:clockInTime, time2:clockOutTime, day:clockDate, notesValue:notes})
       }
-    // }
-    
-    // clockin (UNIX time) --> convert to calendar time 
-    // clockout (UNIX time) --> convert to calendar time 
-    //temptimes.push = clockin, clockout, notes; 
+      
 
     handleTimePicked(times2)
 
-  // update this.state.times
 
 }).catch(function(error) {
     console.log('request failed - Timetable API', error);
@@ -87,18 +82,24 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
     <Container>
 
       <Header>
-        <Left/>
+        <Left>
+          <Button
+            onPress = {() => this.timetableAPI()}
+            transparent
+            style = {{paddingLeft:15}}
+            >
+            
+            <Ionicons name={Ionicons === 'ios' ? 'ios-refresh' : 'md-refresh'} size={25}/>
+          </Button>
+        </Left>
         <Body>
           <Title>Timesheets</Title>
-                          <TouchableOpacity onPress={() => this.timetableAPI()}>
-                          <Text> Refresh </Text>
-                          </TouchableOpacity>
         </Body>
         <Right>
           <Button 
             onPress = {() => this.props.navigation.navigate('AddTimesheet')}
             transparent>
-            <Ionicons name="ios-add" size={30}/>
+            <Ionicons name={Ionicons === 'ios' ? 'ios-add' : 'md-add'} size={28}/>
           </Button>
         </Right>
       </Header>
@@ -106,7 +107,7 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
       <Content>
 
         {
-          this.state.times.map((time, index, arrObj) => {
+          this.state.times.map((time, index) => {
             return (
               <View key={time}>
                 <TouchableOpacity
@@ -116,9 +117,19 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
                       <View>
                         <Text>Shift {index+1}</Text>
                       </View>
-                      <View>
-                        <Text>{time.time1} - {time.time2}</Text>
+
+                      <View style = {styles.rightSide}>
+
+                        <View>
+                          <Text>{time.day}</Text>
+                        </View>
+  
+                        <View>
+                          <Text style = {styles.times}>{time.time1} - {time.time2}</Text>
+                        </View>
+
                       </View>
+
                   </ListItem>
                 </TouchableOpacity>
 
@@ -129,36 +140,6 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
           })
         }
 
-        {/* <Separator bordered>
-          <Text>Wed Apr 3</Text>
-        </Separator>
-
-        <ListItem>
-          <Left>
-            <Text>Shift Total</Text>
-          </Left>
-          <Right>
-            <Text>00m</Text>
-          </Right>
-
-        </ListItem>
-
-        <ListItem last>
-          <Text>Shift Total</Text>
-        </ListItem>
-
-        <Separator bordered>
-          <Text>Wednesday, Mar 27</Text>
-        </Separator>
-
-        <ListItem>
-          <Text>Shift total</Text>
-        </ListItem>
-
-        <ListItem last>
-          <Text>Shift Total</Text>
-        </ListItem> */}
-
       </Content>
 
     </Container>
@@ -168,10 +149,21 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
 }
 const styles = StyleSheet.create({
   timeLabel:{
-      flexDirection: 'row',
-      flex: 1,
-      justifyContent: 'space-between'
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between'
   },
+  
+  rightSide:{
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  times:{
+    fontSize: 12,
+    color: '#4e4e4f'
+  }
+  
 })
 
 

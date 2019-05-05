@@ -1,5 +1,5 @@
 
-
+import { Ionicons } from '@expo/vector-icons';
 import {createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
 import TimesheetScreenRouter from '../TimesheetScreen/index';
 import TimeclockScreen from './TimeclockScreen';
@@ -24,7 +24,7 @@ TimeclockScreenRouter.navigationOptions = {
     tabBarIcon: ({ focused }) => (
       <TabBarIcon
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+        name={Ionicons === 'ios' ? 'ios-clock' : 'md-clock'}
       />
     ),
 };
@@ -35,7 +35,7 @@ MoreScreenRouter.navigationOptions = {
     tabBarIcon: ({ focused }) => (
       <TabBarIcon
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+        name={Ionicons === 'ios' ? 'ios-more' : 'md-more'}
       />
     ),
 };
@@ -45,7 +45,7 @@ TimesheetScreenRouter.navigationOptions = {
     tabBarIcon: ({ focused }) => (
       <TabBarIcon
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+        name={Ionicons === 'ios' ? 'ios-paper' : 'md-paper'}
       />
     ),
 };

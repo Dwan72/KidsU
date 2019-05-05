@@ -5,17 +5,16 @@ import base64 from 'react-native-base64';
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 45,
-    marginLeft: 20,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 100,
     borderWidth: 2,
     borderColor: '#2f5eaa',
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
-    height: 600,
-    width: 330,
+    flex:1
   },
   logincontainer:{
     backgroundColor: '#2d2d29',
