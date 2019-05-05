@@ -25,19 +25,26 @@ export default class ListSeparatorExample extends React.Component{
   static navigationOptions = {
     header: null
   }
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-        times: []
+        times: [],
+        username: this.props.navigation.dangerouslyGetParent().getParam('username', 'error'),
+        password: this.props.navigation.dangerouslyGetParent().getParam('password', 'error'),
     }
 }
 
 timetableAPI() {
+
+    const username = this.state.username;
+    const password = this.state.password; 
+
+
 // Set the headers 
 let headersGet = new Headers();
 headersGet.append('Content-Type', 'application/json');
 headersGet.append('Accept', 'application/json');
-headersGet.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
 handleTimePicked = (times2) => {
   this.setState({
@@ -46,7 +53,7 @@ handleTimePicked = (times2) => {
 }
 
 // Begin API Call 
-fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/notadmin1', {
+fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/' + username, {
      headers: headersGet
 }).then(function(json) {
 

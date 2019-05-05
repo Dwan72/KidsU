@@ -34,7 +34,7 @@ TimeclockScreenRouter.navigationOptions = {
     tabBarIcon: ({ focused }) => (
       <TabBarIcon
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+        name={Platform.OS === 'ios' ? 'ios-clock' : 'md-clock'}
       />
     ),
 };
@@ -45,7 +45,7 @@ MoreScreenRouter.navigationOptions = {
     tabBarIcon: ({ focused }) => (
       <TabBarIcon
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+        name={Platform.OS === 'ios' ? 'ios-more' : 'md-more'}
       />
     ),
 };
@@ -55,7 +55,7 @@ TimesheetScreenRouter.navigationOptions = {
     tabBarIcon: ({ focused }) => (
       <TabBarIcon
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+        name={Platform.OS === 'ios' ? 'ios-paper' : 'md-paper'}
       />
     ),
 };

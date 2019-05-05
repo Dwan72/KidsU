@@ -12,6 +12,8 @@ export default class TimeClockScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: this.props.navigation.dangerouslyGetParent().getParam('username', 'error'),
+      password: this.props.navigation.dangerouslyGetParent().getParam('password', 'error'),
       spinner: 0,
       count: 0,
       toggle: true,
@@ -43,18 +45,21 @@ toggle = () => {this.setState({on: !this.state.on})}
 
 
 validateLocation(callback) {
+  
+    const username = this.state.username;
+    const password = this.state.password; 
 
 this.setState({spinner: 1});
 let headersGet = new Headers();
 
 headersGet.append('Content-Type', 'application/json');
 headersGet.append('Accept', 'application/json');
-headersGet.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
 
 let headersPost = new Headers();
 headersPost.append('Content-Type', 'application/json');
-headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
 
 fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
@@ -98,12 +103,11 @@ function success(pos) {
 
     var timestamp = Date.now()/1000;
 
-
  fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
   method: 'POST',
   headers: headersPost,
   body: JSON.stringify({
-    user: "notadmin1",
+    user: username,
     clockInTime: timestamp,
   })
 }).then(function(json) {
@@ -150,14 +154,17 @@ _pushNotes() {
 var timestamp = Date.now()/1000;
   let headersGet = new Headers();
 
+    const username = this.state.username;
+    const password = this.state.password; 
+
 headersGet.append('Content-Type', 'application/json');
 headersGet.append('Accept', 'application/json');
-headersGet.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
 
 let headersPost = new Headers();
 headersPost.append('Content-Type', 'application/json');
-headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
     var notesHolder = this.state.textInput_Holder;
     const newState = !this.state.toggle;
@@ -165,7 +172,7 @@ headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" +
     this.setState({textInput_Holder:""}); // reset notes box
     this.setState({data:""});
 
-fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/notadmin1', {
+fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/' + username, {
      headers: headersGet
 }).then(function(json) {
 
@@ -210,10 +217,13 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/no
 
 clockingOut = () => {
 
+    const username = this.state.username;
+    const password = this.state.password; 
+
 
 let headersPost = new Headers();
 headersPost.append('Content-Type', 'application/json');
-headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
 
 function clockOutAPI(callback) {
@@ -222,7 +232,7 @@ function clockOutAPI(callback) {
   method: 'POST',
   headers: headersPost,
   body: JSON.stringify({
-    user: "notadmin1",
+    user: username,
     clockOutTime: timestamp,
   })
 }).then(function(json) {
