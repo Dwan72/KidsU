@@ -80,20 +80,22 @@ export default class Login extends React.Component {
  headersGet.append('Accept', 'application/json');
  headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
-       fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
+       fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/locations', {
          headers: headersGet
        }).then((json) => {
-         if (json.status == 200) {
+         //if (json.status == 200) {
     this.props.navigation.navigate('Timeclock',{
       username: username,
       password: password,
     });
-       }
+       /*}
          else {
          alert("The request to login failed. Try again later");
-         }
+         console.log(json);
+         }*/
        }).catch((error) => {
          alert("The request to login failed. Try again later");
+         console.log(error);
        })
      }
 

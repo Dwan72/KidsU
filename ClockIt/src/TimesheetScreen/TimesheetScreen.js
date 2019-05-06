@@ -53,12 +53,12 @@ handleTimePicked = (times2) => {
 }
 
 // Begin API Call 
-fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/' + username, {
+fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' + username, {
      headers: headersGet
 }).then(function(json) {
 
       times2.length = 0;
-      for (let i = (JSON.parse(json._bodyText).length-20); i < JSON.parse(json._bodyText).length; i++){
+      for (let i = (JSON.parse(json._bodyText).length-1); i < JSON.parse(json._bodyText).length; i++){
         var clockin = JSON.parse(json._bodyText)[i].clock_in; 
         var clockout = JSON.parse(json._bodyText)[i].clock_out;
         var notes = JSON.parse(json._bodyText)[i].notes; 

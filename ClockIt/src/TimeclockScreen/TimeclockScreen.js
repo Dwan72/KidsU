@@ -5,6 +5,7 @@ import TimerMachine from 'react-timer-machine'
 import { TouchableHighlight,TextInput, FlatList, AppRegistry, TouchableOpacity, StyleSheet, Alert, View, Text } from 'react-native';
 import { Spinner, Container, Header, Content, Textarea, Form, List, ListItem, Separator, Right, Left, Footer, FooterTab, Button, Icon, Body, Title } from 'native-base';
 import base64 from 'react-native-base64';
+import axios from 'axios';
 
 
 export default class TimeClockScreen extends React.Component {
@@ -61,8 +62,7 @@ let headersPost = new Headers();
 headersPost.append('Content-Type', 'application/json');
 headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
-
-fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/locations', {
+fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/locations', {
      headers: headersGet
 
 }).then(function(json) {
@@ -103,7 +103,7 @@ function success(pos) {
 
     var timestamp = Date.now()/1000;
 
- fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/clock-in', {
   method: 'POST',
   headers: headersPost,
   body: JSON.stringify({
@@ -136,7 +136,17 @@ return new Promise((resolve, reject) => {
   })
 
 // end of validating location
- }).catch(function(error) { console.log('request failed - Validating Location', error) })
+ }).catch(function(error) { 
+  console.log('request failed - Validating Location', error);
+     Alert.alert(
+      "Validating Location Failed",
+      "Please check your network",
+      [
+        { text: "Ok", onPress: () => console.log("Ok Pressed") },
+      ],
+      { cancelable: false }
+    );
+   })
 }
 
 clockingIn() {
@@ -172,7 +182,7 @@ headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + pa
     this.setState({textInput_Holder:""}); // reset notes box
     this.setState({data:""});
 
-fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/' + username, {
+fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' + username, {
      headers: headersGet
 }).then(function(json) {
 
@@ -191,7 +201,7 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/timetable/' 
     }
 
       // Pushing notes
- fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
+ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/notes', {
   method: 'POST',
   headers: headersPost,
   body: JSON.stringify({
@@ -228,7 +238,7 @@ headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + pa
 
 function clockOutAPI(callback) {
     var timestamp = Date.now()/1000;
- fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-out', {
+ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/clock-out', {
   method: 'POST',
   headers: headersPost,
   body: JSON.stringify({
