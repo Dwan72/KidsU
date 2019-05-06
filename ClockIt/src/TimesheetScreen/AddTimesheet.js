@@ -62,62 +62,67 @@ export default class AddTimesheet extends Component {
         })
     }
 
+
+// clockInAPI(timestamp1) {
+
+//     // ex: March 01 2019 --> UNIX Time 
+//     // = 3982183918242/1000; 
+//     var unixStart = new Date(timestamp1);
+    
+//     let headersPost = new Headers();
+//     headersPost.append('Content-Type', 'application/json');
+//     headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+// // let timestamp = the time user puts in as 'from' 
+
+//     fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
+//         method: 'POST',
+//         headers: headersPost,
+//         body: JSON.stringify({
+//             user: "notadmin1",
+//             clockInTime: unixStart,
+//         })
+//     }).then(function(json) {
+//         console.log('request succeeded with json response', json);   
+//         callback();
+//     }).catch(function(error) {
+//         console.log('request failed - Clock in API', error);
+//         this.setState({spinner: 0});
+//     })
+// }
+
+// clockOutAPI(timestamp2) {
+
+//     var unixEnd = new Date(timestamp2);
+
+//     let headersPost = new Headers();
+//     headersPost.append('Content-Type', 'application/json');
+//     headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+
+// // Let timestamp = user clockout time 
+
+// fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-out', {
+//   method: 'POST',
+//   headers: headersPost,
+//   body: JSON.stringify({
+//     user: "notadmin1",
+//     clockOutTime: unixEnd,
+//   })
+// }).then(function(json) {
+
+//     console.log('request succeeded with json response', json);   
+//     callback();
+//   }).catch(function(error) {
+//     console.log('request failed', error);
+//   })
+// }
+
+// clockingPlusRoute = (time1, time2) => {
+//     this.clockInAPI(time1);
+//     this.clockOutAPI(time2);
+//     //this.props.navigation.navigate('Timesheet');
+// }
 /*
-clockInAPI(timestamp) {
-
-    // ex: March 01 2019 --> UNIX Time 
-    // = 3982183918242/1000; 
-
-
-    let headersPost = new Headers();
-headersPost.append('Content-Type', 'application/json');
-headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
-
-// let timestamp = the time user puts in as 'from' 
-
-     fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
-  method: 'POST',
-  headers: headersPost,
-  body: JSON.stringify({
-    user: "notadmin1",
-    clockInTime: timestamp,
-  })
-}).then(function(json) {
-    console.log('request succeeded with json response', json);   
-    callback();
-  }).catch(function(error) {
-    console.log('request failed - Clock in API', error);
-    this.setState({spinner: 0});
-  })
-}
-
-clockOutAPI() {
-
-    let timestamp = this.state.startTime;
-
-    let headersPost = new Headers();
-headersPost.append('Content-Type', 'application/json');
-headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
-
-// Let timestamp = user clockout time 
-
-fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-out', {
-  method: 'POST',
-  headers: headersPost,
-  body: JSON.stringify({
-    user: "notadmin1",
-    clockOutTime: timestamp,
-  })
-}).then(function(json) {
-
-    console.log('request succeeded with json response', json);   
-    callback();
-  }).catch(function(error) {
-    console.log('request failed', error);
-  })
-
-}
-
 notesAPI(notesTimestampIn, notesTimestampOut, notesHolder) {
 
 fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
@@ -146,7 +151,7 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
         const { navigate } = this.props.navigation;
 
         return(
-            <Container>
+            <Container style = {styles.container}>
                 <Header>
                     <Left style={{paddingLeft: 10}}>
                         <Button
@@ -161,107 +166,91 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
                     <Right />
                 </Header>
                 <Content>
-                    <List style = {styles.list}>
-
-                        <ListItem style={styles.item}>
-
-                            <View style={styles.label}>
-                                <TouchableOpacity
-                                    onPress={this.handleStartDatePress}
-                                    >
-                                    <Text>Start Time</Text>
-                                </TouchableOpacity>
-                            </View>
-                            
-                            <View style = {styles.time}>
-                                <TextInput
-                                    placeholder="00:00"
-                                    spellCheck={false}
-                                    value={this.state.startTime}
-                                    editable={!this.state.showStartDatePicker}
-                                    onFocus={this.handleStartDatePress}
-                                />
-                            </View>
-
-                            <DateTimePicker
-                                isVisible={this.state.showStartDatePicker}
-                                onConfirm={this.handleStartDatePicked}
-                                onCancel={this.handleStartDatePickerHide}
-                                mode={'datetime'}
-                                is24Hour={false}
-                            />
-                      
-                        </ListItem>
-
-                        <ListItem style = {styles.item}>
-                            <View style = {styles.item}>
-                                <View style = {styles.label}>
-                                    <TouchableOpacity
-                                        onPress={this.handleEndDatePress}>
-                                        <Text>End Time</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            
-                                <View style = {styles.time}>
-                                    <TextInput
-                                        placeholder="00:00"
-                                        spellCheck={false}
-                                        value={this.state.endTime}
-                                        editable={!this.state.showEndDatePicker}
-                                        onFocus={this.handleEndDatePress}
-                                    />
-                                </View>
-                                <DateTimePicker
-                                        isVisible={this.state.showEndDatePicker}
-                                        onConfirm={this.handleEndDatePicked}
-                                        onCancel={this.handleEndDatePickerHide}
+                    <View>
+                        <View style = {styles.listPlusNotes}>
+                            <List style = {styles.list}>
+        
+                                <ListItem style={styles.item}>
+        
+                                    <View style={styles.label}>
+                                        <TouchableOpacity
+                                            onPress={this.handleStartDatePress}
+                                            >
+                                            <Text>Start Time</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    
+                                    <View style = {styles.time}>
+                                        <TextInput
+                                            placeholder="00:00"
+                                            spellCheck={false}
+                                            value={this.state.startTime}
+                                            editable={!this.state.showStartDatePicker}
+                                            onFocus={this.handleStartDatePress}
+                                        />
+                                    </View>
+        
+                                    <DateTimePicker
+                                        isVisible={this.state.showStartDatePicker}
+                                        onConfirm={this.handleStartDatePicked}
+                                        onCancel={this.handleStartDatePickerHide}
                                         mode={'datetime'}
                                         is24Hour={false}
-                                />
+                                    />
+                              
+                                </ListItem>
+        
+                                <ListItem style = {styles.item}>
+                                    <View style = {styles.item}>
+                                        <View style = {styles.label}>
+                                            <TouchableOpacity
+                                                onPress={this.handleEndDatePress}>
+                                                <Text>End Time</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    
+                                        <View style = {styles.time}>
+                                            <TextInput
+                                                placeholder="00:00"
+                                                spellCheck={false}
+                                                value={this.state.endTime}
+                                                editable={!this.state.showEndDatePicker}
+                                                onFocus={this.handleEndDatePress}
+                                            />
+                                        </View>
+                                        <DateTimePicker
+                                                isVisible={this.state.showEndDatePicker}
+                                                onConfirm={this.handleEndDatePicked}
+                                                onCancel={this.handleEndDatePickerHide}
+                                                mode={'datetime'}
+                                                is24Hour={false}
+                                        />
+                                    </View>
+                                    
+        
+                                </ListItem>
+                            </List>
+        
+                            <View style = {styles.textBox}>
+                                <Text style = {styles.textBoxLabel}>Notes</Text>
+                                <Form>
+                                    <Textarea rowSpan={5} bordered placeholder="Enter Notes" />
+                                </Form>
                             </View>
-                            
+                        </View>
 
-                        </ListItem>
-
-                        {/* <ListItem style = {styles.item}>
-
-                            <View style = {styles.label}>
-                                <Text>Total Time</Text>
-                            </View>
-
-                            <View style = {styles.time}>
-                                { this.state.showTotalTime && <TextInput
-                                    placeholder="Total"
-                                    spellCheck={false}
-                                    value = {this.state.totalTime}
-                                    editable = {false}
-                                />}
-                            </View>
-
-                        </ListItem> */}
-                    </List>
-
-                    <View style = {styles.textBox}>
-                        <Text style = {styles.textBoxLabel}>Notes</Text>
-                        <Form>
-                            <Textarea rowSpan={5} bordered placeholder="Enter Notes" />
-                        </Form>
                     </View>
-
                 </Content>
-                <Footer>
-                    <FooterTab>
-                        <Button full primary
-                            onPress = {() => this.props.navigation.navigate('Timesheet')}>
-                                 {/* clockinAPI --> clockout API --> notesAPI --> 
-                                 create alert success
+                <View style = {styles.button}>
+                    <Button full primary
+                        onPress = {() => this.props.navigation.navigate('Timesheet')}>
+                            {/* clockinAPI --> clockout API --> notesAPI --> 
+                            create alert success
 
-                                , this.props.navigation.navigate('Timesheet')}> */}
-                            <Text>SAVE TIMESHEET</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer>
-
+                        , this.props.navigation.navigate('Timesheet')}> */}
+                        <Text>SAVE TIMESHEET</Text>
+                    </Button>
+                </View>
             </Container>
         );
     }
@@ -289,6 +278,22 @@ const styles = StyleSheet.create({
         fontFamily: 'San Francisco',
         fontWeight: 'bold',
         fontSize: 14,
+    },
+    container:{
+        flex: 1,
+        justifyContent: 'space-between',
+        
+    },
+    button:{
+        position: 'absolute',
+        bottom: 0,
+        flex: 1,
+        minWidth: '100%',
+        paddingBottom: 20
+
+    },
+    listPlusNotes:{
+        flex:1
     }
 
 })
