@@ -29,6 +29,7 @@ export default class ListSeparatorExample extends React.Component{
     super(props)
     this.state = {
         times: [],
+        num: [],
         username: this.props.navigation.dangerouslyGetParent().getParam('username', 'error'),
         password: this.props.navigation.dangerouslyGetParent().getParam('password', 'error'),
     }
@@ -58,7 +59,10 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
 }).then(function(json) {
 
       times2.length = 0;
-      for (let i = (JSON.parse(json._bodyText).length-1); i < JSON.parse(json._bodyText).length; i++){
+      for (let i = (JSON.parse(json._bodyText).length-1); i > (JSON.parse(json._bodyText).length-20); i--){
+        if (i < 0) {
+          break;
+        }
         var clockin = JSON.parse(json._bodyText)[i].clock_in; 
         var clockout = JSON.parse(json._bodyText)[i].clock_out;
         var notes = JSON.parse(json._bodyText)[i].notes; 
@@ -122,17 +126,13 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
                 >
                   <ListItem style={styles.timeLabel}>
                       <View>
-                        <Text>Shift {index+1}</Text>
+                        <Text>{time.day}</Text>
                       </View>
 
                       <View style = {styles.rightSide}>
 
                         <View>
-                          <Text>{time.day}</Text>
-                        </View>
-  
-                        <View>
-                          <Text style = {styles.times}>{time.time1} - {time.time2}</Text>
+                          <Text>{time.time1} - {time.time2}</Text>
                         </View>
 
                       </View>
