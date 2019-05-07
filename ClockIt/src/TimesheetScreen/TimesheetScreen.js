@@ -1,23 +1,11 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Text, Separator, Right, Left, Footer, Button, Icon, Body, Title } from 'native-base';
+import { Container, Header, Content, List, ListItem, Text, Separator, Right, Left, Footer, Button, Icon, Body, Title, Accordion } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import base64 from 'react-native-base64';
 import moment from 'moment'
 
-// const times = [
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-//   {Day: 'March 1', time1: '5:03PM', time2: '10:20PM'},
-// ]
 const times2 = []
 
 export default class ListSeparatorExample extends React.Component{
@@ -70,6 +58,9 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
         var clockInTime = moment.unix(clockin).format("HH:mm");
         var clockOutTime = moment.unix(clockout).format("HH:mm");
         var clockDate = moment.unix(clockin).format("MMMM, Do")
+        if(notes==""){
+          notes="\"no comment\""
+        }
 
         times2.push({time1:clockInTime, time2:clockOutTime, day:clockDate, notesValue:notes})
       }
@@ -83,7 +74,35 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
   })
 
 }
-
+_renderHeader(item, expanded) {
+  return (
+    <View style={styles.listHeaderContainer}>
+      
+      <View style = {{flexDirection: "column"}}>
+        <Text style={styles.day}>
+          {" "}{item.day}
+        </Text>
+        <Text style={styles.times}>
+          {" "}{item.time1} - {item.time2}
+        </Text>
+      </View>
+      
+      {expanded
+        ? <Ionicons style={styles.listIcon} name={Ionicons === 'ios' ? 'ios-arrow-up' : 'md-arrow-dropup'} size={15}/>
+        : <Ionicons style={styles.listIcon} name={Ionicons === 'ios' ? 'ios-arrow-down' : 'md-arrow-dropdown'} size={15}/>
+      }
+    </View>
+  );
+}
+_renderContent(item) {
+  return (
+    <Text
+      style={styles.listNotesContainer}
+    >
+      {"  "}{item.notesValue}
+    </Text>
+  );
+}
   
   render() {
 
@@ -102,7 +121,7 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
             style = {{paddingLeft:15}}
             >
             
-            <Ionicons name={Ionicons === 'ios' ? 'ios-refresh' : 'md-refresh'} size={25}/>
+            <Ionicons style={styles.navButtons} name={Ionicons === 'ios' ? 'ios-refresh' : 'md-refresh'} size={25}/>
           </Button>
         </Left>
         <Body>
@@ -116,14 +135,14 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
             })
           }
             transparent>
-            <Ionicons name={Ionicons === 'ios' ? 'ios-add' : 'md-add'} size={28}/>
+            <Ionicons style={styles.navButtons} name={Ionicons === 'ios' ? 'ios-add' : 'md-add'} size={28}/>
           </Button>
         </Right>
       </Header>
 
       <Content>
 
-        {
+        {/* {
           this.state.times.map((time, index) => {
             return (
               <View key={time}>
@@ -151,7 +170,15 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
               </View>
             )
           })
-        }
+        } */}
+        <Accordion
+            dataArray={this.state.times}
+            animation={true}
+            expanded={true}
+            renderHeader={this._renderHeader}
+            renderContent={this._renderContent}
+        />
+
 
       </Content>
 
@@ -172,11 +199,38 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-end',
   },
-  times:{
+  timesxxx:{
     fontSize: 12,
     color: '#4e4e4f'
+  },
+  day: {
+    fontWeight: "600",
+    color:"4B4B4B"
+  },
+  times: {
+    fontSize:13,
+    fontStyle: "italic",
+    color:"#4B4B4B"
+  },
+  listNotesContainer: {
+    padding: 10,
+    backgroundColor:"#FFFFF",
+    fontSize: 14
+  },
+  listHeaderContainer: {
+    flexDirection: "row",
+    padding: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#F2F2F2"
+  },
+  listIcon: {
+    fontSize: 18,
+    color: "#4B4B4B"
+  },
+  navButtons:{
+    color: "#0093D5"
   }
-  
 })
 
 
