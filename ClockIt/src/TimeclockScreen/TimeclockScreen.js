@@ -66,7 +66,7 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/locations', 
      headers: headersGet
 
 }).then(function(json) {
-    console.log('request succeeded with json response111', JSON.parse(json._bodyText)[0].xcoord);
+    console.log('request succeeded with json response', JSON.parse(json._bodyText)[0].xcoord);
     var xlocation = JSON.parse(json._bodyText)[0].xcoord;
     var ylocation = JSON.parse(json._bodyText)[0].ycoord;
 // JSON.parse(json.bodyText)[0].xcoord
@@ -111,7 +111,7 @@ function success(pos) {
     clockInTime: timestamp,
   })
 }).then(function(json) {
-    console.log('request succeeded with json response222', json);   
+    console.log('request succeeded with json response', json);   
     callback();
   }).catch(function(error) {
     console.log('request failed - Clock in API', error);
@@ -196,8 +196,6 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
            timestamp-5 < JSON.parse(json._bodyText)[i].clock_out) {
         notesTimestampIn = JSON.parse(json._bodyText)[i].clock_in;
         notesTimestampOut = JSON.parse(json._bodyText)[i].clock_out;
-        console.log("Acceptable notestimestampin:", notesTimestampIn);
-        console.log("Acceptable notestimestampout:", notesTimestampOut);
         break;
       }
     }
@@ -214,7 +212,7 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
 }).then(function(json) {
 
     this.setState({spinner: 0});
-    console.log('request succeeded with json response111', (json._bodyText));
+    console.log('request succeeded with json response', (json._bodyText));
 
   }).catch(function(error) {
     this.setState({spinner: 0});
@@ -249,7 +247,7 @@ function clockOutAPI(callback) {
   })
 }).then(function(json) {
 
-    console.log('request succeeded with json response333333', json);   
+    console.log('request succeeded with json response', json);   
     callback();
   }).catch(function(error) {
     console.log('request failed', error);

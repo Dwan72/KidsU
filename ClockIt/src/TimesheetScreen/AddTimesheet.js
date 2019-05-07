@@ -124,6 +124,22 @@ export default class AddTimesheet extends Component {
  }
 
  clockingPlusRoute = (time1, time2, notes) => {
+
+        var unixStart = moment(time1).unix();
+    var unixEnd = moment(time2).unix();
+
+    if (unixStart > unixEnd) {
+    Alert.alert(
+      "Error",
+      "Please check your start and end times.",
+      [
+        { text: "Ok"}
+      ],
+      { cancelable: false }
+    );
+    }
+    else {
+
      this.clockInAPI(time1, () => 
         {this.clockOutAPI(time2, () => 
         {this.notesAPI(time1, time2, notes, () =>
@@ -132,6 +148,7 @@ export default class AddTimesheet extends Component {
             );}
         );
  })
+ }
      //this.props.navigation.navigate('Timesheet');
  }
 
@@ -158,9 +175,6 @@ notesAPI(notesTimestampIn, notesTimestampOut, notesHolder, callback) {
     const username = this.state.username;
     const password = this.state.password; 
 
-    console.log("timestamp in:", notesTimestampIn);
-    console.log("timestamp out:", notesTimestampOut);
-    console.log("notes:", notesHolder);
      let headersPost = new Headers();
      headersPost.append('Content-Type', 'application/json');
      headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
