@@ -1,17 +1,16 @@
 import React from "react";
-import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text, Card, CardItem } from "native-base";
-import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text,} from "native-base";
+import { StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
 import App from '../../App';
 
 const styles = StyleSheet.create({
-    userTitle: {
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginLeft: 10,
+  userTitle: {
+    fontSize: 22,
+    fontWeight: '600'
   },
-    userValue: {
-    marginTop: 20,
-    marginLeft: 10,
+  userValue: {
+    fontSize: 15,
+    paddingTop: 10
   },
   exportButtonLogOut: {
     textAlignVertical: 'center',
@@ -22,6 +21,17 @@ const styles = StyleSheet.create({
     padding: 25,
     width: 115,
     borderRadius: 10
+  },
+  buttonLogOut: {
+    position: 'absolute',
+    bottom: 0,
+    flex: 1,
+    minWidth: '100%',
+    paddingBottom: 20,
+    padding: 15
+  },
+  allText: {
+    margin: 15
   }
 })
 
@@ -69,7 +79,7 @@ export default class MoreScreen extends React.Component {
       if(!this.state.logoutPressed) {
         const { navigate } = this.props.navigation;
         return (
-          <Container>
+          <Container style = {{justifyContent: 'space-between'}}>
             <Header>
               <Left/>
                 <Body>
@@ -78,14 +88,28 @@ export default class MoreScreen extends React.Component {
               <Right/>
             </Header>
             <Content>
-              <Text style = {styles.userTitle}>User</Text>
-              <Text style = {styles.userValue}>{this.state.username}</Text>
+              <View style = {styles.allText}>
+                <Text style = {styles.userTitle}>Username:</Text>
+                <Text style = {styles.userValue}>{this.state.username}</Text>
+              </View>
+
+{/* 
               <TouchableOpacity
                 onPress={()=>this.loggingOut()}
                 style={[styles.exportButtonLogOut]}>
                   <Text>Log Out</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+
             </Content>
+
+            <View style = {styles.buttonLogOut}>
+                <Button full danger
+                  onPress={()=>this.loggingOut()}
+                  >
+                  <Text>Log Out</Text>
+                </Button>
+            </View>
+
           </Container>
         );
       } else {

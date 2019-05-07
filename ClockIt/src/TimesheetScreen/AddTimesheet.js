@@ -213,7 +213,7 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/notes', {
                         <Button
                             onPress = {() => this.props.navigation.navigate('Timesheet')}
                             transparent>
-                            <Ionicons name="ios-close" size={30}/>
+                            <Ionicons style={styles.exitScreenIcon} name={Ionicons === 'ios' ? 'ios-close' : 'md-close'} size={30}/>
                         </Button>
                     </Left>
                     <Body>
@@ -345,11 +345,15 @@ const styles = StyleSheet.create({
         bottom: 0,
         flex: 1,
         minWidth: '100%',
-        paddingBottom: 20
+        paddingBottom: 20,
+        padding: 15
 
     },
     listPlusNotes:{
         flex:1
+    },
+    exitScreenIcon: {
+        color: "#0093D5"
     }
 
 })

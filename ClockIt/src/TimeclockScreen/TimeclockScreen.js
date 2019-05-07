@@ -1,12 +1,7 @@
 import React from 'react';
-import Fragment from 'react';
-import Component from 'react';
-import TimerMachine from 'react-timer-machine'
-import { TouchableHighlight,TextInput, FlatList, AppRegistry, TouchableOpacity, StyleSheet, Alert, View, Text } from 'react-native';
-import { Spinner, Container, Header, Content, Textarea, Form, List, ListItem, Separator, Right, Left, Footer, FooterTab, Button, Icon, Body, Title } from 'native-base';
+import { TouchableOpacity, StyleSheet, Alert, View} from 'react-native';
+import { Spinner, Container, Header, Content, Textarea, List, ListItem, Right, Left, Body, Title, Text, Button } from 'native-base';
 import base64 from 'react-native-base64';
-import axios from 'axios';
-
 
 export default class TimeClockScreen extends React.Component {
 
@@ -274,13 +269,13 @@ function clockOutAPI(callback) {
     const changeBGColor = toggle?"#48d1cc":"#fa8072";
     const changeVisible = toggle?1:0;
     const changeInvisible = toggle?0:1;
-    const changeOnClock = toggle?"Off the clock":"On the clock";
+    const changeOnClock = toggle?"OFF THE CLOCK":"ON THE CLOCK";
     const changetimerBox = toggle?"woopdewoop":"timerBox";
     const spinner = this.state.spinner;
 
 
     return (
-          <Container>
+          <Container style = {{justifyContent:'space-between'}}>
             <Header>
               <Left/>
               <Body>
@@ -288,33 +283,64 @@ function clockOutAPI(callback) {
               </Body>
               <Right />
             </Header>
-            <Content>
-            <List>
-                <ListItem>
-                  <View style = {styles.label}>
-                      <Text>STATUS</Text><Text style = {styles.statusVal}> {changeOnClock} </Text>
-                  </View>
-                </ListItem>
-            </List>
-            <Text style = {styles.Notes}>Notes:</Text>
-                <Textarea style = {styles.navigateNotes} returnKeyType={"done"}
-                    onChangeText={data => this.setState({ textInput_Holder: data })}
-                    blurOnSubmit = {true} rowSpan={8} bordered placeholder="Enter your notes here"
-                    value={this.state.textInput_Holder} />
+            <Content style = {styles.contentContainer}>
+
+              <View style = {styles.statusText}>
+                  <Text style = {{fontWeight: "600"}}>STATUS</Text>
+                  <View style={{paddingTop: 5}}><Text style = {styles.statusVal}> {changeOnClock} </Text></View>
+              </View>
+            
+            <View style = {styles.notesContainer}>
+              <Text>Notes:</Text>
+              <View style = {styles.textBox}>
+                <Textarea style = {styles.navigateNotes} 
+                  returnKeyType={"done"}
+                  onChangeText={data => this.setState({ textInput_Holder: data })}
+                  blurOnSubmit = {true} 
+                  rowSpan={8} 
+                  bordered placeholder="Enter your notes here"
+                  value={this.state.textInput_Holder} />
+              </View>
+            </View>
 
             <Spinner color='blue' animating={spinner} />
-
-            <TouchableOpacity onPress={()=>this.clockingIn()} disabled={changeInvisible}
-                activeOpacity={0.5} style={[styles.buttonClockInOut,
+{/* 
+            <TouchableOpacity onPress={()=>this.clockingIn()} 
+              disabled={changeInvisible}
+              activeOpacity={0.5} 
+              style={[styles.buttonClockInOut,
                   {backgroundColor:changeBGColor, opacity:changeVisible}]}>
                 <Text style={styles.text}> Clock In</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>this.clockingOut()} disabled={changeVisible}
-                activeOpacity={0.5} style={[styles.buttonClockInOut,
+
+            <TouchableOpacity onPress={()=>this.clockingOut()} 
+              disabled={changeVisible}
+              activeOpacity={0.5} 
+              style={[styles.buttonClockInOut,
                   {backgroundColor:changeBGColor, opacity:changeInvisible}]}>
-                <Text style={styles.text}> Clock Out</Text>
-            </TouchableOpacity>
+              <Text style={styles.text}> Clock Out</Text>
+            </TouchableOpacity> */}
+
       </Content>
+      
+      <View style = {styles.buttonContainer}>
+        <Button full success
+            onPress={()=>this.clockingIn()}
+            disabled={changeInvisible}
+            style = {{opacity:changeVisible, minWidth: '100%',  }}
+            >
+            <Text>Clock In</Text>
+          </Button>
+  
+        <Button full danger
+            onPress={()=>this.clockingOut()}
+            disabled={changeInvisible}
+            style = {{opacity:changeInvisible, minWidth: '100%', }}
+            >
+            <Text>Clock Out</Text>
+        </Button>
+
+      </View>
     </Container>
     );
   }
@@ -336,20 +362,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOpacity: 0.3
   },
-    Notes: {
+    notesContainer: {
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'left',
-      paddingTop: 5,
-      textAlign: 'left'
+      textAlign: 'left',
+      padding: 15
+  },
+  textBox: {
+    paddingTop: 5
   },
     navigateNotes: {
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'stretch',
-      borderColor: 'gray',
-      textAlign: 'center'
   },
     dayTotal: {
       fontWeight: 'bold',
@@ -378,10 +401,7 @@ const styles = StyleSheet.create({
       textAlign: 'center'
   },
     statusVal: {
-      textAlignVertical: 'center',
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
+      fontSize: 13,
       textAlign: 'left'
   },
     timerBox: {
@@ -400,5 +420,23 @@ const styles = StyleSheet.create({
     text: {
   	   textAlign: 'center',
   	   alignItems: 'center'
+  },
+  contentContainer: {
+    flexDirection: 'column',
+    justiyContent: 'space-around',
+  },
+  statusText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
+    paddingTop: 10
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    flex: 1,
+    minWidth: '100%',
+    paddingBottom: 20,
+    padding: 15
   },
 })
