@@ -60,7 +60,7 @@ export default class MoreScreen extends React.Component {
     }
 
     returnToLogin = () => {
-      this.setState({logoutPressed: true});
+      this.props.navigation.navigate('Home');
       this.setState({username: 'NULL'});
       this.setState({password: 'NULL'});
     }

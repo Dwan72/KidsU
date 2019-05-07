@@ -71,7 +71,7 @@ export default class Login extends React.Component {
 
 
 
-     if(username != '' && password != '' && password.length >= 8) {
+     if(username != '' && password != '') {
 
            // encoding credentials
  let headersGet = new Headers();
@@ -83,18 +83,25 @@ export default class Login extends React.Component {
        fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/locations', {
          headers: headersGet
        }).then((json) => {
-         //if (json.status == 200) {
+         if (json.status == 200) {
     this.props.navigation.navigate('Timeclock',{
       username: username,
       password: password,
     });
-       /*}
-         else {
-         alert("The request to login failed. Try again later");
-         console.log(json);
-         }*/
+       }
+         else if (json._bodyText == "Unauthorized Access") {
+        alert("Incorrect Password");
+        console.log(json._bodyText);
+         } 
+          else if (json._bodyText[14] == "s" && json._bodyText[15] == "e") {
+            alert("Incorrect Username");
+          }
+          else{
+         alert("The request to login failed.");
+         console.log(json._bodyText[15]);
+         }
        }).catch((error) => {
-         alert("The request to login failed. Try again later");
+         alert("The request to login failed.");
          console.log(error);
        })
      }
