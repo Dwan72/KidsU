@@ -196,6 +196,8 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
            timestamp-5 < JSON.parse(json._bodyText)[i].clock_out) {
         notesTimestampIn = JSON.parse(json._bodyText)[i].clock_in;
         notesTimestampOut = JSON.parse(json._bodyText)[i].clock_out;
+        console.log("Acceptable notestimestampin:", notesTimestampIn);
+        console.log("Acceptable notestimestampout:", notesTimestampOut);
         break;
       }
     }

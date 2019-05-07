@@ -29,7 +29,6 @@ export default class ListSeparatorExample extends React.Component{
     super(props)
     this.state = {
         times: [],
-        num: [],
         username: this.props.navigation.dangerouslyGetParent().getParam('username', 'error'),
         password: this.props.navigation.dangerouslyGetParent().getParam('password', 'error'),
     }
@@ -89,6 +88,9 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
   render() {
 
     const { navigate } = this.props.navigation;
+    const username = this.state.username;
+    const password = this.state.password;
+    
     return(      
     <Container>
 
@@ -108,7 +110,11 @@ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/timetable/' 
         </Body>
         <Right>
           <Button 
-            onPress = {() => this.props.navigation.navigate('AddTimesheet')}
+            onPress = {() => this.props.navigation.navigate('AddTimesheet', {
+            username: username,
+            password: password,
+            })
+          }
             transparent>
             <Ionicons name={Ionicons === 'ios' ? 'ios-add' : 'md-add'} size={28}/>
           </Button>

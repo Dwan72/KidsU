@@ -4,7 +4,7 @@ import { Col, Row, Grid } from 'react-native-easy-grid'
 import { Ionicons } from '@expo/vector-icons';
 import { Segment, Form, Textarea } from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { TouchableOpacity, View, StyleSheet , TextInput } from 'react-native'
+import { TouchableOpacity, View, StyleSheet , TextInput, Alert } from 'react-native'
 import moment from 'moment'
 import base64 from 'react-native-base64';
 
@@ -13,9 +13,12 @@ export default class AddTimesheet extends Component {
     static navigationOptions = {
         header: null
     }
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
+            textInput_Holder: '',
+            username: this.props.navigation.dangerouslyGetParent().getParam('username', 'error'),
+            password: this.props.navigation.dangerouslyGetParent().getParam('password', 'error'),
             showStartDatePicker: false,
             showEndDatePicker: false,
             showTotalTime: false,
@@ -63,89 +66,128 @@ export default class AddTimesheet extends Component {
     }
 
 
-// clockInAPI(timestamp1) {
+ clockInAPI(timestamp1, callback) {
 
-//     // ex: March 01 2019 --> UNIX Time 
-//     // = 3982183918242/1000; 
-//     var unixStart = new Date(timestamp1);
+        const username = this.state.username;
+    const password = this.state.password; 
+
+     var unixStart = moment(timestamp1).unix();
     
-//     let headersPost = new Headers();
-//     headersPost.append('Content-Type', 'application/json');
-//     headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+     let headersPost = new Headers();
+     headersPost.append('Content-Type', 'application/json');
+     headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
-// // let timestamp = the time user puts in as 'from' 
+ // let timestamp = the time user puts in as 'from' 
 
-//     fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-in', {
-//         method: 'POST',
-//         headers: headersPost,
-//         body: JSON.stringify({
-//             user: "notadmin1",
-//             clockInTime: unixStart,
-//         })
-//     }).then(function(json) {
-//         console.log('request succeeded with json response', json);   
-//         callback();
-//     }).catch(function(error) {
-//         console.log('request failed - Clock in API', error);
-//         this.setState({spinner: 0});
-//     })
-// }
+     fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/clock-in', {
+         method: 'POST',
+         headers: headersPost,
+         body: JSON.stringify({
+             user: username,
+             clockInTime: unixStart,
+         })
+     }).then(function(json) {
+         console.log('request succeeded with json response', json);   
+         callback();
+     }).catch(function(error) {
+         console.log('request failed - Clock in API', error);
+         this.setState({spinner: 0});
+     })
+ }
 
-// clockOutAPI(timestamp2) {
+ clockOutAPI(timestamp2, callback) {
 
-//     var unixEnd = new Date(timestamp2);
+    const username = this.state.username;
+    const password = this.state.password; 
 
-//     let headersPost = new Headers();
-//     headersPost.append('Content-Type', 'application/json');
-//     headersPost.append('Authorization', 'Basic ' + base64.encode("notadmin1" + ":" + "notadmin1"));
+    var unixEnd = moment(timestamp2).unix();
 
-// // Let timestamp = user clockout time 
+     let headersPost = new Headers();
+     headersPost.append('Content-Type', 'application/json');
+     headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
-// fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/clock-out', {
-//   method: 'POST',
-//   headers: headersPost,
-//   body: JSON.stringify({
-//     user: "notadmin1",
-//     clockOutTime: unixEnd,
-//   })
-// }).then(function(json) {
+ // Let timestamp = user clockout time 
 
-//     console.log('request succeeded with json response', json);   
-//     callback();
-//   }).catch(function(error) {
-//     console.log('request failed', error);
-//   })
-// }
+ fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/clock-out', {
+   method: 'POST',
+   headers: headersPost,
+     body: JSON.stringify({
+     user: username,
+     clockOutTime: unixEnd,
+   })
+ }).then(function(json) {
+     console.log('request succeeded with json response', json);   
+     callback();
+   }).catch(function(error) {
+     console.log('request failed', error);
+   })
+ }
 
-// clockingPlusRoute = (time1, time2) => {
-//     this.clockInAPI(time1);
-//     this.clockOutAPI(time2);
-//     //this.props.navigation.navigate('Timesheet');
-// }
-/*
-notesAPI(notesTimestampIn, notesTimestampOut, notesHolder) {
+ clockingPlusRoute = (time1, time2, notes) => {
+     this.clockInAPI(time1, () => 
+        {this.clockOutAPI(time2, () => 
+        {this.notesAPI(time1, time2, notes, () =>
+            {this.alertSave()}
 
-fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
+            );}
+        );
+ })
+     //this.props.navigation.navigate('Timesheet');
+ }
+
+alertSave() {
+
+                    Alert.alert(
+      "Saving Timesheet",
+      "Are you sure?",
+      [
+        { text: "Yes", onPress: () => this.props.navigation.navigate('Timesheet') },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    );
+
+}
+
+notesAPI(notesTimestampIn, notesTimestampOut, notesHolder, callback) {
+
+    const username = this.state.username;
+    const password = this.state.password; 
+
+    console.log("timestamp in:", notesTimestampIn);
+    console.log("timestamp out:", notesTimestampOut);
+    console.log("notes:", notesHolder);
+     let headersPost = new Headers();
+     headersPost.append('Content-Type', 'application/json');
+     headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
+
+    var unixStart = moment(notesTimestampIn).unix();
+    var unixEnd = moment(notesTimestampOut).unix();
+
+
+fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/notes', {
   method: 'POST',
   headers: headersPost,
   body: JSON.stringify({
     notes: notesHolder,
-    clockInTime: notesTimestampIn,
-    clockOutTime: notesTimestampOut
+    clockInTime: unixStart,
+    clockOutTime: unixEnd
   })
 }).then(function(json) {
-
-    this.setState({spinner: 0});
-    console.log('request succeeded with json response111', (json._bodyText));
+    console.log('request succeeded with json response', (json._bodyText));
+    callback();
 
   }).catch(function(error) {
-    this.setState({spinner: 0});
     console.log('request failed - Notes API', error);
   })
 
 
 }
-*/
+
     render() {
 
         const { navigate } = this.props.navigation;
@@ -234,7 +276,11 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
                             <View style = {styles.textBox}>
                                 <Text style = {styles.textBoxLabel}>Notes</Text>
                                 <Form>
-                                    <Textarea rowSpan={5} bordered placeholder="Enter Notes" />
+                                    <Textarea rowSpan={5} bordered placeholder="Enter Notes" 
+                                    onChangeText={data => this.setState({ textInput_Holder: data })}
+                                    value={this.state.textInput_Holder}
+                                    returnKeyType={"done"} blurOnSubmit = {true}
+                                    />
                                 </Form>
                             </View>
                         </View>
@@ -243,11 +289,7 @@ fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/notes', {
                 </Content>
                 <View style = {styles.button}>
                     <Button full primary
-                        onPress = {() => this.props.navigation.navigate('Timesheet')}>
-                            {/* clockinAPI --> clockout API --> notesAPI --> 
-                            create alert success
-
-                        , this.props.navigation.navigate('Timesheet')}> */}
+                        onPress = {() => this.clockingPlusRoute(this.state.rawStartTime, this.state.rawEndTime, this.state.textInput_Holder)}>
                         <Text>SAVE TIMESHEET</Text>
                     </Button>
                 </View>
