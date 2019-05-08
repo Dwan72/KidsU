@@ -1,6 +1,8 @@
 {
   "expo": {
     "name": "KidsU",
+    "description": "ClockIt is a cloud-based time tracking and scheduling app for employees to clcok in and out from their smartphones",
+    "icon": "./assets/icon.png",
     "slug": "ClockIt",
     "privacy": "public",
     "sdkVersion": "32.0.0",
@@ -8,6 +10,18 @@
       "ios",
       "android"
     ],
+    
+    "ios": {
+      "bundleIdentifier": "com.clockIt.KidsU",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.clockIt.KidsU",
+      "permissions": [
+        ""
+      ]
+    },
+
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,9 +35,6 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    }
+    ]
   }
 }
