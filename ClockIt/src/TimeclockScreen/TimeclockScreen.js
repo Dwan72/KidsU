@@ -304,7 +304,7 @@ function clockOutAPI(callback) {
             </View>
 
             <Spinner color='blue' animating={spinner} />
-{/* 
+
             <TouchableOpacity onPress={()=>this.clockingIn()} 
               disabled={changeInvisible}
               activeOpacity={0.5} 
@@ -319,28 +319,31 @@ function clockOutAPI(callback) {
               style={[styles.buttonClockInOut,
                   {backgroundColor:changeBGColor, opacity:changeInvisible}]}>
               <Text style={styles.text}> Clock Out</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity> 
+            {/* <View style = {styles.buttonSuccessContainer}>
+            <Button full success
+              onPress={()=>this.clockingIn()}
+              disabled={changeInvisible}
+              style = {{opacity:changeVisible, minWidth: '100%',  }}
+              >
+              <Text>Clock In</Text>
+            </Button>
+          </View>
+  
+        <View style = {styles.buttonDangerContainer}>
+          <Button full danger
+              onPress={()=>this.clockingOut()}
+              disabled={changeInvisible}
+              style = {{opacity:changeInvisible, minWidth: '100%', }}
+              >
+              <Text>Clock Out</Text>
+          </Button>
+        </View> */}
 
       </Content>
       
-      <View style = {styles.buttonContainer}>
-        <Button full success
-            onPress={()=>this.clockingIn()}
-            disabled={changeInvisible}
-            style = {{opacity:changeVisible, minWidth: '100%',  }}
-            >
-            <Text>Clock In</Text>
-          </Button>
-  
-        <Button full danger
-            onPress={()=>this.clockingOut()}
-            disabled={changeInvisible}
-            style = {{opacity:changeInvisible, minWidth: '100%', }}
-            >
-            <Text>Clock Out</Text>
-        </Button>
+          
 
-      </View>
     </Container>
     );
   }
@@ -431,7 +434,15 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingTop: 10
   },
-  buttonContainer: {
+  buttonSuccessContainer: {
+    position: 'absolute',
+    bottom: 0,
+    flex: 1,
+    minWidth: '100%',
+    paddingBottom: 60,
+    padding: 15
+  },
+  buttonDangerContainer: {
     position: 'absolute',
     bottom: 0,
     flex: 1,
