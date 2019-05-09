@@ -40,7 +40,7 @@ static navigationOptions = {
 toggle = () => {this.setState({on: !this.state.on})}
 
 
-validateLocation(callback) {
+validateLocation(callback, callback2) {
   
     const username = this.state.username;
     const password = this.state.password; 
@@ -52,19 +52,24 @@ headersGet.append('Content-Type', 'application/json');
 headersGet.append('Accept', 'application/json');
 headersGet.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
+var xlocations = [];
+var ylocations = [];
 
 let headersPost = new Headers();
 headersPost.append('Content-Type', 'application/json');
 headersPost.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
 
+
 fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/locations', {
      headers: headersGet
 
 }).then(function(json) {
-    console.log('request succeeded with json response', JSON.parse(json._bodyText)[0].xcoord);
-    var xlocation = JSON.parse(json._bodyText)[0].xcoord;
-    var ylocation = JSON.parse(json._bodyText)[0].ycoord;
-// JSON.parse(json.bodyText)[0].xcoord
+
+    for (i = 0; i < JSON.parse(json._bodyText).length; i++) {
+     xlocations.push(JSON.parse(json._bodyText)[i].xcoord/1000000);
+     ylocations.push(JSON.parse(json._bodyText)[i].ycoord/1000000);
+  }
+
 // validate location
 var geoOptions = {
     enableHighAccuracy: true,
@@ -78,23 +83,26 @@ function error(err) {
 
 function success(pos) {
   var crd = pos.coords;
-
   console.log('Your current position is:');
   console.log(`Latitude : ${crd.latitude}`);
   console.log(`Longitude: ${crd.longitude}`);
   console.log(`More or less ${crd.accuracy} meters.`);
-
-  var currentLat = crd.latitude*1000000;
-  var currentLon = crd.longitude*1000000;
+  var currentLat = crd.latitude;
+  var currentLon = crd.longitude;
   console.log(currentLat, currentLon);
+  var validated = false; 
 
-  var maxxlocation = xlocation + 2000000;
-  var minxlocation = xlocation - 2000000;
-  var maxylocation = ylocation + 2000000;
-  var minylocation = ylocation - 2000000;
+// check if you are in atleast 1 location
+for (i = 0; i < xlocations.length; i++) {
+  if ((xlocations[i]-0.02 < currentLon && currentLon < xlocations[i]+0.02) &&
+    (ylocations-0.02 < currentLat && currentLat < ylocations[i]+0.02)) {
 
-  if ((minxlocation < currentLon && currentLon < maxxlocation) &&
-    (minylocation < currentLat && currentLat < maxylocation)) {
+  validated = true; 
+  break;
+}
+}
+
+if (validated == true) {
 
     var timestamp = Date.now()/1000;
 
@@ -119,7 +127,7 @@ function success(pos) {
       "You are not in the designated area",
       "Please be within xxx feet of the location.",
       [
-        { text: "Ok", onPress: () => console.log("Ok Pressed") },
+        { text: "Ok", onPress: () => callback2()},
       ],
       { cancelable: false }
     );
@@ -137,7 +145,7 @@ return new Promise((resolve, reject) => {
       "Validating Location Failed",
       "Please check your network",
       [
-        { text: "Ok", onPress: () => console.log("Ok Pressed") },
+        { text: "Ok", onPress: () => callback2()},
       ],
       { cancelable: false }
     );
@@ -145,7 +153,7 @@ return new Promise((resolve, reject) => {
 }
 
 clockingIn() {
-this.validateLocation(() => {this.changeSpinner();})
+this.validateLocation(() => {this.changeSpinner();}, () => {this.turnOffSpinner();})
 }
 
 
@@ -153,6 +161,10 @@ changeSpinner() {
       const newState = !this.state.toggle;
       this.setState({spinner: 0});
       this.setState({toggle:newState})
+}
+
+turnOffSpinner() {
+        this.setState({spinner: 0});
 }
 
 _pushNotes() {

@@ -123,19 +123,19 @@ export default class CreateAccount extends React.Component {
           email: email,
       })
     }).then(function(json) {
-      if (json == null) {
+      if (json.status == 200) {
           console.log('request succeeded with json response', json);
           alert('Account created! Please wait for approval.');
-          this.setState({submissionFinished: true});
         }
         else {
           alert('Server Error. Account has not been created.');
-          this.setState({submissionFinished: true});
+          console.log(json);
+
         }
       }).catch(function(error) {
           console.log('request failed', error)
       })
-
+          this.setState({submissionFinished: true});
       }
 }
 
