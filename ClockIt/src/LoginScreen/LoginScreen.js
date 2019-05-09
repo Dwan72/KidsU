@@ -98,7 +98,6 @@ export default class Login extends React.Component {
           }
           else{
          alert("The request to login failed.");
-         console.log(json._bodyText[15]);
          }
        }).catch((error) => {
          alert("The request to login failed.");

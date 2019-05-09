@@ -109,7 +109,7 @@ export default class CreateAccount extends React.Component {
           this.setState({Error:'Password must be at least 8 characters long'})
       }
       else{
-        fetch('http://ec2-23-20-253-138.compute-1.amazonaws.com:5000/api/v1/register', {
+        fetch('http://ec2-3-14-1-107.us-east-2.compute.amazonaws.com/api/v1/register', {
           method: 'POST',
           headers: {
           'Accept': 'application/json',
@@ -123,12 +123,19 @@ export default class CreateAccount extends React.Component {
           email: email,
       })
     }).then(function(json) {
-          console.log('request succeeded with json response', json)
+      if (json == null) {
+          console.log('request succeeded with json response', json);
+          alert('Account created! Please wait for approval.');
+          this.setState({submissionFinished: true});
+        }
+        else {
+          alert('Server Error. Account has not been created.');
+          this.setState({submissionFinished: true});
+        }
       }).catch(function(error) {
           console.log('request failed', error)
       })
-        alert('Account created! Please wait for approval.');
-        this.setState({submissionFinished: true});
+
       }
 }
 
